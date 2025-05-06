@@ -1,0 +1,109 @@
+<mat-drawer-container class="drawer-container" autosize>
+  <mat-drawer #drawer class="drawer-sidenav" mode="side">
+
+    <div class="div-logo">
+      <img class="img-logo"
+           [src]="appConfig.getAppLogo()"/>
+    </div>
+    <mat-card class="card-menu-button">
+      <mat-card-content>
+        <p>{{ appConfig.getAppOwner() }}</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="card-menu-button" *ngIf="isUserAdmin()" (click)="onDashboard()">
+      <mat-card-content>
+        <p>Dashboard</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card  class="card-menu-button" (click)="onLogOut()">
+      <mat-card-content>
+        <p>{{ customerService.getLoggedUser() == null ? 'Login': 'Logout'}}</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer>
+
+  <div class="drawer-sidenav-content">
+    <mat-toolbar style="background-color: #9B9B7A; color: white;">
+      <button mat-icon-button class="example-icon" (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>{{ appConfig.getAppName() }}</span>
+      <span class="example-spacer"></span>
+      <app-cart-button></app-cart-button>
+    </mat-toolbar>
+
+    <img class="img-banner"
+         src="https://i.pinimg.com/originals/b1/3b/2f/b13b2f17232adde6a6182cd680bf46ea.jpg"/>
+    <img class="img-banner"
+         src="https://wallpapercave.com/wp/wp9442288.jpg"/>
+    <img class="img-banner"
+         src="https://e0.pxfuel.com/wallpapers/786/725/desktop-wallpaper-ecommerce-solutions-smart-online-shopping.jpg"/>
+
+    <mat-card class="card-about-us">
+      <mat-card-title class="title-about-us">Welcome to {{ appConfig.getAppName() }}</mat-card-title>
+      <mat-card-content>
+
+        <div class="div-text">
+          <p>
+            Discover a world of endless possibilities with our curated collection of must-have products. Whether you're
+            searching for the latest trends in fashion, cutting-edge gadgets, or unique home decor pieces, we've got you
+            covered. Here's why you'll love shopping with us:
+
+            Unrivaled Selection: Explore thousands of products across multiple categories, carefully handpicked to cater
+            to every taste and preference. From fashion-forward clothing to innovative tech gadgets and everything in
+            between, we've got something for everyone.
+            <br><br>
+            Quality Assurance: We believe in offering only the best to our customers. That's why each product in our
+            collection undergoes rigorous quality checks to ensure durability, performance, and style. Shop with
+            confidence knowing that you're investing in excellence.
+
+            Exceptional Value: Enjoy competitive prices without compromising on quality. We believe that everyone
+            deserves access to top-notch products without breaking the bank. Take advantage of our special deals,
+            discounts, and promotions to get more value for your money.
+          </p>
+          <img class="img-section"
+               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvgL8aZnPANiRUfY5V22U8DBTvQ6xnxTjBvw&usqp=CAU"/>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="card-about-us">
+      <mat-card-title class="title-about-us">Impeccable Service</mat-card-title>
+      <mat-card-content>
+        <div class="div-text">
+          <img class="img-section" style="margin-left: 0px !important; margin-right: 16px"
+               src="https://www.michalsons.com/wp-content/uploads/2020/05/online-shopping-online-store-scaled-e1589481671612.jpg">
+
+          <p>
+            Seamless Shopping Experience: Say goodbye to hassle-filled shopping experiences. Our user-friendly website
+            is designed to make your online shopping journey smooth and enjoyable. Easily browse, search, and filter
+            through our vast selection, and complete your purchase with just a few clicks.
+
+            Secure Payment Options: Your security is our top priority. That's why we offer a range of secure payment
+            options to choose from, including credit/debit cards, PayPal, and more. Rest assured that your personal and
+            financial information is safe with us.
+            <br><br>
+            Fast and Reliable Shipping: We understand that you're eager to receive your order. That's why we partner
+            with trusted shipping carriers to ensure prompt and reliable delivery to your doorstep. Track your package
+            every step of the way and enjoy speedy shipping times.
+
+            Dedicated Customer Support: Have a question or need assistance? Our friendly customer support team is here
+            to help. Reach out to us via email, phone, or live chat, and we'll promptly address your concerns and
+            provide personalized assistance.
+
+            <br><br>
+            Start Shopping Now: Dive into our diverse collection and experience the convenience of online shopping like
+            never before. Whether you're treating yourself or searching for the perfect gift, {{appConfig.getAppName()}}
+            is
+            your ultimate destination for all things fabulous. Happy shopping!
+          </p>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+    <app-list-products [isAdmin]="false"></app-list-products>
+  </div>
+
+</mat-drawer-container>
+

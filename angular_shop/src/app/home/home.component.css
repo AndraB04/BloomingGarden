@@ -1,0 +1,61 @@
+.drawer-container {
+  width: 100%;
+  height: 100%;
+}
+
+.drawer-sidenav-content {
+  height: 100%;
+}
+
+.drawer-sidenav {
+  padding: 20px;
+}
+
+.card-menu-button {
+  width: 350px;
+  margin-bottom: 16px;
+}
+
+.div-logo {
+  width: 100%;
+  display: flex;
+}
+.img-logo{
+  height: 200px;
+  margin: auto;
+}
+.img-banner{
+  width: 30%;
+  margin: 16px;
+  height: 300px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.card-about-us {
+  margin: 16px;
+}
+
+.title-about-us {
+  margin: 16px;
+}
+
+.text-about-us {
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.text-margin-top {
+  margin-top: 16px;
+}
+
+.div-text {
+  display: flex;
+}
+
+.img-section {
+  width: 350px;
+  margin-left: 16px;
+  border-radius: 16px;
+}

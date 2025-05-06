@@ -1,0 +1,25 @@
+.card-customer{
+  width: 30vw;
+  margin: 16px;
+}
+.page-view{
+  display: flex;
+  flex-wrap: wrap;
+}
+.div-controls{
+  display: flex;
+}
+.div-admin-controls{
+  display: grid;
+}
+.p-name{
+  font-size: 20px;
+  color:black;
+  font-weight: bold;
+  margin-top: 16px;
+}
+.p-text{
+  font-size: 14px;
+  font-style: italic;
+}
+
