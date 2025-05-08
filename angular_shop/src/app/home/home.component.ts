@@ -23,6 +23,7 @@ import {ConfigurationsService} from "../services/configurations.service";
     CartButtonComponent,
     NgIf,
     NgFor
+
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -53,6 +54,8 @@ export class HomeComponent {
     return false;
 
   }
+  public currentYear: number = new Date().getFullYear();
+
   onDashboard(){
     this.router.navigate(['/','dashboard']);
   }
