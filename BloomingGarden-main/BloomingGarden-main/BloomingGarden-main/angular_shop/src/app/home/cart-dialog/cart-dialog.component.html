@@ -1,0 +1,47 @@
+<p class="cart-title">All items from cart</p>
+<mat-dialog-content class="mat-typography">
+  <div class="div-row">
+    <mat-card *ngFor="let product of products" class="item-card">
+      <mat-card-content>
+        <div style="display: flex">
+          <img [src]="product.image1" class="img-preview"/>
+
+          <div>
+            <p class="lbl-title-details">Title: {{product.title}}</p>
+            <p class="lbl-description-details ">Description: {{product.description}}</p>
+            <p class="lbl-description-details ">Product Type: {{product.productType}}</p>
+
+          </div>
+          <div class="div-spacer"></div>
+          <div style="display: contents; width: 150px;">
+            <p class="lbl-price">{{ product.price }} RON</p>
+          </div>
+          <div class="div-buttons">
+            <button mat-icon-button color="primary" (click)="onDeleteFromCart(product)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="item-card">
+      <mat-card-title style="margin-left: 16px; margin-bottom: 16px;">
+        Add some details about your order
+      </mat-card-title>
+      <mat-card-content>
+        <div class="input-container">
+          <mat-form-field class="input-field">
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Product description" [formControl]="details" required></textarea>
+            <mat-error *ngIf="details.invalid">{{getErrorMessage(details)}}</mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial (click)="onBuy()">Buy!</button>
+</mat-dialog-actions>

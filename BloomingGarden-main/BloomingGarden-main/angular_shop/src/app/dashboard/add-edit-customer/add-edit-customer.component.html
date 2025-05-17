@@ -1,0 +1,54 @@
+<mat-card class="card-container">
+  <mat-card-content>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="John Smith" [formControl]="name" required>
+        <mat-error *ngIf="name.invalid">{{getErrorMessage(name)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="youremail@mail.com" [formControl]="email" required>
+        <mat-error *ngIf="email.invalid">{{getErrorMessage(email)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Address</mat-label>
+        <input matInput placeholder="Street, town" [formControl]="address" required>
+        <mat-error *ngIf="address.invalid">{{getErrorMessage(address)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Phone</mat-label>
+        <input matInput placeholder="07342234522" [formControl]="phone" required>
+        <mat-error *ngIf="phone.invalid">{{getErrorMessage(phone)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [formControl]="password" required>
+        <mat-error *ngIf="password.invalid">{{getErrorMessage(password)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>User role</mat-label>
+        <mat-select [formControl]="userRole">
+          <mat-option value="CUSTOMER">Customer</mat-option>
+          <mat-option value="ADMIN">Admin</mat-option>
+        </mat-select>
+        <mat-error *ngIf="userRole.invalid">{{getErrorMessage(userRole)}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="div-buttons-container">
+      <button mat-raised-button color="primary" class="btn-save" (click)="onSave()">Save</button>
+    </div>
+  </mat-card-content>
+</mat-card>
+

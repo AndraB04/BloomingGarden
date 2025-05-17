@@ -1,0 +1,85 @@
+<mat-drawer-container class="drawer-container"  autosize >
+  <mat-drawer #drawer class="drawer-sidenav" mode="over">
+    <div style="display: flex; justify-content: flex-end; padding: 1rem;">
+      <button mat-icon-button (click)="drawer.close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="div-logo">
+      <img class="img-logo" [src]="appConfig.getAppLogo()" />
+    </div>
+    <mat-card class="card-menu-button">
+      <mat-card-content>
+        <p>{{ appConfig.getAppOwner() }}</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="card-menu-button" *ngIf="isUserAdmin()" (click)="onDashboard()">
+      <mat-card-content>
+        <p>Dashboard</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="card-menu-button" (click)="onLogOut()">
+      <mat-card-content>
+        <p>{{ customerService.getLoggedUser() == null ? 'Login': 'Logout' }}</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer>
+
+
+  <div class="drawer-sidenav-content">
+
+
+    <mat-toolbar class="fixed-header" style="background-color: #9B9B7A; color: white;">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>{{ appConfig.getAppName() }}</span>
+      <span class="example-spacer"></span>
+      <app-cart-button></app-cart-button>
+    </mat-toolbar>
+
+    <div class="main-content">
+
+      <div class="banners-container">
+        <mat-card *ngFor="let banner of banners" class="banner-card">
+          <img [src]="banner.imageUrl" alt="Promotional banner" class="banner-image" />
+          <button mat-raised-button color="primary" class="banner-button" (click)="navigateTo(banner.redirectUrl)">
+            {{ banner.buttonText }}
+          </button>
+        </mat-card>
+      </div>
+
+      <mat-card class="card-about-us">
+        <mat-card-title class="title-about-us">
+          Welcome to {{ appConfig.getAppName() }}
+        </mat-card-title>
+        <mat-card-content>
+          <div class="div-text">
+            <div class="text-content">
+              <p>Discover a world of endless possibilities...</p>
+              <p><strong>Unrivaled Selection:</strong> Explore thousands of products...</p>
+              <p><strong>Quality Assurance:</strong> Every product undergoes rigorous checks...</p>
+              <p><strong>Exceptional Value:</strong> Enjoy competitive prices...</p>
+            </div>
+            <img class="img-section" src="https://i.pinimg.com/736x/35/33/fe/3533fec518b39b0d30ab77875e5e8f35.jpg" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <p>&copy; {{ currentYear }} {{ appConfig.getAppName() }}. All rights reserved.</p>
+      </div>
+      <div class="footer-right">
+        <a href="#" class="footer-link">Privacy Policy</a>
+        <a href="#" class="footer-link">Terms of Service</a>
+        <a href="#" class="footer-link">Contact</a>
+      </div>
+    </div>
+  </footer>
+</mat-drawer-container>
+
+

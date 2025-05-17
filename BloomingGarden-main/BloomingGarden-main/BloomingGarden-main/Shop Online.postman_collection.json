@@ -1,0 +1,599 @@
+{
+	"info": {
+		"_postman_id": "5b11320a-c4dd-43f4-baf0-d78f2c1c317d",
+		"name": "Shop Online",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2396225"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@admin.com\",\n    \"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/auth/login",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"email\": \"admin@admin.com\",\n    \"password\": \"admin\",\n    \"reTypePassword\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/auth/register",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Get All Customers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/customers",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCustomerById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/customers/customersById/3",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"customers",
+								"customersById",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCustomerByName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/customers/customersByName/admin",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"customers",
+								"customersByName",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCustomerById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ion Popescu\",\n    \"address\": \"Strada Teilor, nr 10\",\n    \"email\": \"ion.popescu@gmail.com\",\n    \"password\": \"admin\",\n    \"phone\": \"0751000000\",\n    \"userRole\": \"CUSTOMER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/customers/deleteCustomerById/3",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"customers",
+								"deleteCustomerById",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ion Popescu\",\n    \"address\": \"Strada Teilor, nr 10\",\n    \"email\": \"ion.popescu@gmail.com\",\n    \"password\": \"admin\",\n    \"phone\": \"0751000000\",\n    \"userRole\": \"CUSTOMER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/customers/addCustomer",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"customers",
+								"addCustomer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 3,\n    \"name\": \"Ion Popescu\",\n    \"address\": \"Strada Teilor, nr 10\",\n    \"email\": \"ion.popescu@gmail.com\",\n    \"password\": \"admin\",\n    \"phone\": \"0751000000\",\n    \"userRole\": \"CUSTOMER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/customers/updateCustomer",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"customers",
+								"updateCustomer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/products",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ProductById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/products/productById/1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"products",
+								"productById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ProductById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/products/deleteProduct/1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"products",
+								"deleteProduct",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Telefon Samsung\",\n    \"description\": \"Smartphone 128 GB\",\n    \"price\": \"1200\",\n    \"image1\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"image2\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"image3\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"image4\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"productType\": \"MEDIUM\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/products/addProduct",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"products",
+								"addProduct"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name\": \"Telefon Samsung\",\n    \"description\": \"Smartphone 128 GB\",\n    \"price\": \"1200\",\n    \"image1\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"image2\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"image3\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"image4\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n    \"productType\": \"MEDIUM\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/products/updateProduct",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"products",
+								"updateProduct"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/orders",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"date\": \"2024-06-01\",\n    \"total\": 1200.0,\n    \"details\": \"Lasati comanda la poarta\",\n    \"paymentStatus\": \"PENDING\",\n    \"customer\": {\n        \"id\": 1,\n        \"name\": \"admin\",\n        \"address\": null,\n        \"email\": \"admin@admin.com\",\n        \"password\": \"$2a$10$0p1eSjVW8w9uuUBLR5TdtOJYIvty4qoFuRyt7nMqETj4mCMFn/zUO\",\n        \"phone\": null,\n        \"userRole\": \"ADMIN\"\n    },\n    \"productList\": [\n        {\n            \"id\": 2,\n            \"name\": \"Telefon Samsung\",\n            \"description\": \"Smartphone 128 GB\",\n            \"price\": 1200.0,\n            \"image1\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image2\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image3\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image4\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"productType\": \"MEDIUM\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/orders/addOrder",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"orders",
+								"addOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"date\": \"2024-06-01\",\n    \"total\": 1200.0,\n    \"details\": \"Lasati comanda la poarta\",\n    \"paymentStatus\": \"PENDING\",\n    \"customer\": {\n        \"id\": 1,\n        \"name\": \"admin\",\n        \"address\": null,\n        \"email\": \"admin@admin.com\",\n        \"password\": \"$2a$10$0p1eSjVW8w9uuUBLR5TdtOJYIvty4qoFuRyt7nMqETj4mCMFn/zUO\",\n        \"phone\": null,\n        \"userRole\": \"ADMIN\"\n    },\n    \"productList\": [\n        {\n            \"id\": 2,\n            \"name\": \"Telefon Samsung\",\n            \"description\": \"Smartphone 128 GB\",\n            \"price\": 1200.0,\n            \"image1\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image2\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image3\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image4\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"productType\": \"MEDIUM\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/orders/deleteOrderById/1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"orders",
+								"deleteOrderById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm Order By Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"date\": \"2024-06-01\",\n    \"total\": 1200.0,\n    \"details\": \"Lasati comanda la poarta\",\n    \"paymentStatus\": \"PENDING\",\n    \"customer\": {\n        \"id\": 1,\n        \"name\": \"admin\",\n        \"address\": null,\n        \"email\": \"admin@admin.com\",\n        \"password\": \"$2a$10$0p1eSjVW8w9uuUBLR5TdtOJYIvty4qoFuRyt7nMqETj4mCMFn/zUO\",\n        \"phone\": null,\n        \"userRole\": \"ADMIN\"\n    },\n    \"productList\": [\n        {\n            \"id\": 2,\n            \"name\": \"Telefon Samsung\",\n            \"description\": \"Smartphone 128 GB\",\n            \"price\": 1200.0,\n            \"image1\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image2\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image3\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image4\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"productType\": \"MEDIUM\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/orders/confirmOrderById/2",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"orders",
+								"confirmOrderById",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Order By Id",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"date\": \"2024-06-01\",\n    \"total\": 1200.0,\n    \"details\": \"Lasati comanda la poarta\",\n    \"paymentStatus\": \"PENDING\",\n    \"customer\": {\n        \"id\": 1,\n        \"name\": \"admin\",\n        \"address\": null,\n        \"email\": \"admin@admin.com\",\n        \"password\": \"$2a$10$0p1eSjVW8w9uuUBLR5TdtOJYIvty4qoFuRyt7nMqETj4mCMFn/zUO\",\n        \"phone\": null,\n        \"userRole\": \"ADMIN\"\n    },\n    \"productList\": [\n        {\n            \"id\": 2,\n            \"name\": \"Telefon Samsung\",\n            \"description\": \"Smartphone 128 GB\",\n            \"price\": 1200.0,\n            \"image1\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image2\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image3\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"image4\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMS9oxYswykukHHLIlD_r5e6de3nTdxHrnzQ&s\",\n            \"productType\": \"MEDIUM\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/orders/cancelOrderById/2",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"orders",
+								"cancelOrderById",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/orders/orderById/1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"orders",
+								"orderById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api_url",
+			"value": "http://localhost:8081/api",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,30 @@
+<mat-drawer
+  class="drawer-sidenav"
+  mode="over"
+  [opened]="open"
+  style="background-color: #424536 !important; color: #EDDCD2 !important;"
+>
+  <div style="display: flex; justify-content: flex-end; padding: 1rem;">
+    <button mat-icon-button (click)="closeSidebar.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="div-logo">
+    <img class="img-logo" [src]="appLogo" />
+  </div>
+  <mat-card class="card-menu-button" style="background-color: #424536; color: #EDDCD2;">
+    <mat-card-content>
+      <p>{{ appOwner }}</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card-menu-button" *ngIf="isAdmin" (click)="goToDashboard.emit()" style="background-color: #424536; color: #EDDCD2;">
+    <mat-card-content>
+      <p>Dashboard</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card-menu-button" (click)="logOut.emit()" style="background-color: #424536; color: #EDDCD2;">
+    <mat-card-content>
+      <p>{{ loggedInUser == null ? 'Login': 'Logout' }}</p>
+    </mat-card-content>
+  </mat-card>
+</mat-drawer>
