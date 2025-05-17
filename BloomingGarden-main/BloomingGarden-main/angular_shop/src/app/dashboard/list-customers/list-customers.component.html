@@ -1,0 +1,18 @@
+<div class="page-view">
+  <mat-card *ngFor="let customer of customers" class="card-customer">
+    <mat-card-content>
+
+      <p class="p-name">{{ customer.name }} </p>
+      <p class="p-text">Address: {{ customer.address }}</p>
+      <p class="p-text">Email: {{ customer.email }}</p>
+      <p class="p-text">Phone: {{ customer.phone }}</p>
+      <p class="p-text">User Role: {{ customer.userRole }}</p>
+
+      <div class="div-admin-controls">
+        <button mat-raised-button color="primary" class="btn-action" (click)="onEdit(customer)">Edit</button>
+        <div style="height: 16px"></div>
+        <button mat-raised-button color="accent" class="btn-action" (click)="onDelete(customer)">Delete</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

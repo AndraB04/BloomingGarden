@@ -1,0 +1,34 @@
+<div class="page-view">
+  <mat-card *ngFor="let reservation of orders" class="card-customer">
+    <mat-card-content>
+
+      <p class="p-name">Date: {{ reservation.date }}</p>
+      <p class="p-name">Name: {{ reservation.customer.name }} </p>
+      <p class="p-text">Address: {{ reservation.customer.address }}</p>
+      <p class="p-text">Email: {{ reservation.customer.email }}</p>
+      <p class="p-text">Phone: {{ reservation.customer.phone }}</p>
+      <p class="p-text">Status: {{ reservation.paymentStatus }}</p>
+      <p class="p-text">Order id: {{ reservation.id }}</p>
+      <p class="p-text">Order Details: {{ reservation.details }}</p>
+
+      <div style="display: flex" *ngFor="let item of reservation.roomList">
+        <img [src]="item.image" class="img-preview"/>
+
+        <div>
+          <p class="lbl-title-details">Title: {{ item.name }}</p>
+          <p class="lbl-description-details ">Description: {{ item.description }}</p>
+        </div>
+        <div class="div-spacer"></div>
+
+      </div>
+
+      <p class="p-total">Total: {{ reservation.total }} RON</p>
+
+      <div class="div-admin-controls">
+        <button mat-raised-button color="primary" class="btn-action margin-bottom" (click)="onConfirm(reservation)">Confirm</button>
+        <button mat-raised-button color="warn" class="btn-action margin-bottom" (click)="onCanceled(reservation)">Cancel</button>
+        <button mat-raised-button color="accent" class="btn-action margin-bottom" (click)="onDelete(reservation)">Delete</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

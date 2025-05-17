@@ -1,0 +1,70 @@
+<mat-card class="card-container">
+  <mat-card-content>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Title</mat-label>
+        <input matInput placeholder="Product Title" [formControl]="name" required>
+        <mat-error *ngIf="name.invalid">{{getErrorMessage(name)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Product description" [formControl]="description" required></textarea>
+        <mat-error *ngIf="description.invalid">{{getErrorMessage(description)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Price</mat-label>
+        <input matInput placeholder="99.99 RON" [formControl]="price" required>
+        <mat-error *ngIf="price.invalid">{{getErrorMessage(price)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Image</mat-label>
+        <input matInput placeholder="Image URL" [formControl]="image1" required>
+        <mat-error *ngIf="image1.invalid">{{getErrorMessage(image1)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Image</mat-label>
+        <input matInput placeholder="Image URL" [formControl]="image2" required>
+        <mat-error *ngIf="image2.invalid">{{getErrorMessage(image2)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Image</mat-label>
+        <input matInput placeholder="Image URL" [formControl]="image3" required>
+        <mat-error *ngIf="image3.invalid">{{getErrorMessage(image3)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Image</mat-label>
+        <input matInput placeholder="Image URL" [formControl]="image4" required>
+        <mat-error *ngIf="image4.invalid">{{getErrorMessage(image4)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="input-container">
+      <mat-form-field class="input-field">
+        <mat-label>Product Type</mat-label>
+        <mat-select [formControl]="productType">
+          <mat-option value="BOUQUETS">Bouquets</mat-option>
+          <mat-option value="ARRANGEMENTS">Arrangements</mat-option>
+          <mat-option value="PLANTS">Plants</mat-option>
+          <mat-option value="ACCESORIES">Accesories</mat-option>
+          <mat-option value="GIFTS">Gifts</mat-option>
+        </mat-select>
+        <mat-error *ngIf="productType.invalid">{{getErrorMessage(productType)}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="div-buttons-container">
+      <button mat-raised-button color="primary" class="btn-save" (click)="onSave()">Save</button>
+    </div>
+  </mat-card-content>
+</mat-card>
+
