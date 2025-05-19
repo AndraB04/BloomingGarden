@@ -9,7 +9,7 @@ body, html {
 .drawer-container {
   width: 100%;
   height: 100%;
-  background-color: #F9F1DC;
+  background-color: white;
 
 }
 .fixed-header {
@@ -26,72 +26,6 @@ body, html {
   padding: 1rem;
 }
 
-.toolbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  color: #1d1d1d;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.toolbar .logo {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.toolbar button {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-}
-
-.drawer-sidenav{
-  background-color: #424536;
-}
-
-.card-menu-button:hover {
-  background-color: #2C2E24;
-  font-style: italic;
-}
-
-::ng-deep mat-drawer.drawer-sidenav {
-  color: #EDDCD2;
-}
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 80%;
-  max-width: 400px;
-  height: 100%;
-  background-color: #6F725A;
-  padding: 24px;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
-  z-index: 999;
-}
-
-.sidebar.open {
-  transform: translateX(0);
-}
-
-.sidebar .close-btn {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  cursor: pointer;
-}
 
 
 .main-content {
@@ -176,56 +110,87 @@ body, html {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+
 .banners-container {
   display: flex;
-  flex-wrap: nowrap;
-  gap: clamp(10px, 2vw, 40px);
-  padding-top: -800px;
   overflow-x: auto;
+  gap: 20px;
+  padding: 10px 5px 20px 5px; /* Am redus padding-ul lateral containerului */
+  margin-bottom: 30px;
   scroll-snap-type: x mandatory;
-  justify-content: center;
 }
 
 .banner-card {
   position: relative;
-  width: 100%;
-  max-width: 40%;
-  padding-top: 50%;
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-  overflow: hidden;
-  border-radius: clamp(6px, 1vw, 8px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  /* PĂSTREAZĂ DIMENSIUNILE EXISTENTE AICI SAU LASĂ BROWSERUL SĂ LE DETERMINE */
+  /* De exemplu, dacă ai deja: */
+   flex: 0 0 49%;
+   height: 700px;
+
+  border-radius: 10px; /* Colțuri mai rotunjite */
+  overflow: hidden;   /* Important pentru a tăia imaginea și a păstra colțurile rotunjite */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08); /* Umbră mai definită */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  scroll-snap-align: center; /* Centrează elementele la snap */
+}
+
+.banner-card:hover {
+  transform: translateY(-6px) scale(1.02); /* Efect subtil de ridicare și mărire la hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 10px rgba(0, 0, 0, 0.1);
 }
 
 .banner-image {
+  display: block; /* Elimină orice spațiu extra sub imagine */
+  width: 100%;
+  height: 100%;   /* Asigură-te că imaginea umple cardul dacă height e setat pe .banner-card */
+  object-fit: cover; /* Taie imaginea pentru a umple spațiul fără a o distorsiona */
+  transition: transform 0.4s ease; /* Tranziție pentru efectul de zoom pe imagine */
+}
+
+.banner-card:hover .banner-image {
+  transform: scale(1.05); /* Mărește ușor imaginea la hover pe card */
+}
+
+/* Overlay subtil peste imagine pentru a îmbunătăți contrastul textului butonului */
+.banner-card::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4) 100%); /* Gradient doar în partea de jos */
+  z-index: 1; /* Se asigură că e deasupra imaginii, dar sub buton */
+  opacity: 0.7; /* Ajustează opacitatea după preferințe */
+  transition: opacity 0.3s ease;
 }
 
-.banner-button {
+.banner-card:hover::before {
+  opacity: 0.85; /* Accentuează overlay-ul la hover */
+}
+
+.banner-button.mat-mdc-raised-button {
   position: absolute;
-  bottom: clamp(12px, 3vh, 20px);
+  bottom: 38px;
   left: 50%;
   transform: translateX(-50%);
-  padding: clamp(8px, 1.5vh, 12px) clamp(16px, 3vw, 24px);
-  font-size: clamp(0.8rem, 2vw, 1rem);
-  font-weight: bold;
-  background-color: #6F725A !important;
-  color: white;
-  border: none;
-  border-radius: clamp(20px, 4vw, 25px);
-  cursor: pointer;
-  transition: all 0.3s ease;
   z-index: 2;
-  white-space: nowrap;
+  border-radius: 25px;
+  padding: 30px 44px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  background-color: #6F725A !important; *
+  color: white !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.banner-button.mat-mdc-raised-button:hover {
+  /* background-color: #darker-shade-of-primary !important; */ /* O nuanță mai închisă la hover */
+  transform: translateX(-50%) translateY(-2px); /* Efect subtil de ridicare */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
 /* Container utility class */
 .container {
   width: 100%;

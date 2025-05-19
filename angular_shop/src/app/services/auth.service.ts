@@ -4,18 +4,18 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ConfigurationsService } from "./configurations.service"; // Presupunând că aceasta e corectă
+import { ConfigurationsService } from "./configurations.service";
 
-// --- EXPORTĂ ACESTE INTERFEȚE ---
+// --- INTERFEȚE EXPORTATE ---
 export interface User {
-  id: string;
-  username: string;
+  id: string;       // Vom converti la string
+  username: string;   // Serverul trimite 'name'
   email: string;
-  userRole: 'ADMIN' | 'USER';
+  userRole: 'ADMIN' | 'USER' | 'CUSTOMER'; // Asigură-te că 'CUSTOMER' e aici
 }
 
 export interface AuthResponse {
-  token: string | null;
+  token: string | null; // Placeholder token
   user: User;
   message?: string;
 }
@@ -25,14 +25,12 @@ export interface RegistrationData {
   email: string;
   password?: string;
 }
+// --- SFÂRȘIT INTERFEȚE ---
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // Vom folosi ConfigurationsService pentru apiUrl
-  // private apiUrl = 'http://localhost:8080/api'; // Eliminăm apiUrl hardcodat
-
   private currentUserSubject = new BehaviorSubject<User | null>(this.getStoredUser());
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -42,16 +40,13 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private appConfig: ConfigurationsService // Injectăm ConfigurationsService
+    private appConfig: ConfigurationsService
   ) {
-    console.log('AuthService initialized. Stored user:', this.currentUserValue);
+    console.log('AuthService Initialized. Stored User:', this.currentUserValue);
   }
 
-  // Metodă helper pentru a obține URL-ul API-ului
   private getApiUrl(): string {
-    // Asigură-te că metoda getApiUrl() din ConfigurationsService returnează string-ul corect
-    // ex: 'http://localhost:8080/api'
-    return this.appConfig.getApiUrl();
+    return this.appConfig.getApiUrl(); // Asigură-te că această metodă există și returnează URL-ul corect
   }
 
   public get currentUserValue(): User | null {
@@ -73,50 +68,71 @@ export class AuthService {
 
   logIn(credentials: { email: string, password: string }): Observable<AuthResponse> {
     const loginUrl = `${this.getApiUrl()}/auth/login`;
-    console.log(`AuthService: Attempting login to ${loginUrl} with email: ${credentials.email}`);
+    console.log(`AuthService: Attempting login to ${loginUrl} for email: ${credentials.email}`);
 
-    return this.http.post<any>(loginUrl, credentials).pipe(
-      tap(response => {
-        console.log('AuthService - RAW HTTP Response from server on login:', JSON.stringify(response, null, 2));
+    return this.http.post<any>(loginUrl, credentials).pipe( // Răspunsul brut de la server este 'any'
+      tap(rawResponse => {
+        console.log('[AuthService TAP] Raw server response:', JSON.stringify(rawResponse, null, 2));
       }),
-      map((responseFromServer: any) => {
-        console.log('AuthService - map - Processing server response:', JSON.stringify(responseFromServer, null, 2));
+      map((serverResponse: any) => {
+        console.log('[AuthService MAP] Processing server response:', JSON.stringify(serverResponse, null, 2));
 
-        const serverUserData = responseFromServer.data; // JSON-ul tău are user-ul în "data"
-        const message = responseFromServer.message;
-        const status = responseFromServer.status;
+        // Extragem datele din structura JSON pe care ai arătat-o:
+        // { status: 200, message: "...", data: { id: ..., name: ..., userRole: "CUSTOMER", ... } }
+        const statusInBody = serverResponse.status;
+        const messageFromServer = serverResponse.message;
+        const userDataFromServer = serverResponse.data;
 
-        if (status === 200 && serverUserData && typeof serverUserData === 'object' &&
-          serverUserData.id !== undefined &&
-          serverUserData.name && typeof serverUserData.name === 'string' && // Serverul trimite 'name'
-          serverUserData.email && typeof serverUserData.email === 'string' &&
-          serverUserData.userRole && (serverUserData.userRole === 'ADMIN' || serverUserData.userRole === 'USER')) {
+        // Validare strictă a datelor primite
+        if (
+          statusInBody === 200 &&
+          userDataFromServer &&
+          typeof userDataFromServer === 'object' &&
+          userDataFromServer.id !== undefined && // Verificăm existența, nu valoarea exactă
+          typeof userDataFromServer.name === 'string' && userDataFromServer.name.trim() !== '' &&
+          typeof userDataFromServer.email === 'string' && userDataFromServer.email.trim() !== '' &&
+          typeof userDataFromServer.userRole === 'string' &&
+          (userDataFromServer.userRole === 'ADMIN' || userDataFromServer.userRole === 'USER' || userDataFromServer.userRole === 'CUSTOMER')
+        ) {
+          // Toate verificările au trecut
+          console.log('[AuthService MAP] Server response validation PASSED. Role:', userDataFromServer.userRole);
 
           const mappedUser: User = {
-            id: String(serverUserData.id),
-            username: serverUserData.name, // Mapăm 'name' la 'username'
-            email: serverUserData.email,
-            userRole: serverUserData.userRole
+            id: String(userDataFromServer.id), // Convertim id la string
+            username: userDataFromServer.name,   // Mapăm 'name' la 'username'
+            email: userDataFromServer.email,
+            userRole: userDataFromServer.userRole as 'ADMIN' | 'USER' | 'CUSTOMER'
           };
 
-          const tokenToStore = "PLACEHOLDER_TOKEN_" + new Date().getTime();
-          console.warn(
-            `AuthService: No real token from server. Using placeholder: ${tokenToStore}. NOT FOR PRODUCTION.`
-          );
+          // Folosim un token placeholder, deoarece serverul nu returnează unul
+          const placeholderToken = "PLACEHOLDER_TOKEN_" + Date.now();
+          // console.warn(`AuthService: Using placeholder token: ${placeholderToken}. THIS IS NOT FOR PRODUCTION.`);
 
-          const authResponse: AuthResponse = {
-            token: tokenToStore,
+          const finalAuthResponse: AuthResponse = {
+            token: placeholderToken,
             user: mappedUser,
-            message: message
+            message: messageFromServer
           };
 
-          console.log('AuthService - map - Successfully mapped response:', JSON.stringify(authResponse, null, 2));
-          this.storeAuthData(authResponse.token, authResponse.user);
-          return authResponse;
+          console.log('[AuthService MAP] Successfully created AuthResponse:', JSON.stringify(finalAuthResponse, null, 2));
+          this.storeAuthData(finalAuthResponse.token, finalAuthResponse.user);
+          return finalAuthResponse;
         } else {
-          const errorMsg = (responseFromServer.message && status !== 200) ? responseFromServer.message : 'Invalid login response: user data missing or incomplete.';
-          console.error('AuthService - map - Error processing server response:', errorMsg, 'Received:', JSON.stringify(responseFromServer, null, 2));
-          throw new Error(errorMsg);
+          // Validarea a eșuat. Construim un mesaj de eroare detaliat.
+          let validationErrorReason = "Unknown validation failure.";
+          if (statusInBody !== 200) validationErrorReason = `Expected status 200 in body, got ${statusInBody}.`;
+          else if (!userDataFromServer || typeof userDataFromServer !== 'object') validationErrorReason = "'data' field is missing or not an object.";
+          else if (userDataFromServer.id === undefined) validationErrorReason = "'data.id' is missing.";
+          else if (!userDataFromServer.name || typeof userDataFromServer.name !== 'string') validationErrorReason = "'data.name' is missing or not a string.";
+          else if (!userDataFromServer.email || typeof userDataFromServer.email !== 'string') validationErrorReason = "'data.email' is missing or not a string.";
+          else if (!userDataFromServer.userRole || typeof userDataFromServer.userRole !== 'string') validationErrorReason = "'data.userRole' is missing or not a string.";
+          else if (!(userDataFromServer.userRole === 'ADMIN' || userDataFromServer.userRole === 'USER' || userDataFromServer.userRole === 'CUSTOMER')) {
+            validationErrorReason = `Unrecognized userRole: '${userDataFromServer.userRole}'. Expected ADMIN, USER, or CUSTOMER.`;
+          }
+
+          const errorMessage = `Invalid login response structure or data: ${validationErrorReason}`;
+          console.error('[AuthService MAP] Validation FAILED:', errorMessage, 'Full server response:', JSON.stringify(serverResponse, null, 2));
+          throw new Error(errorMessage); // Această eroare va fi prinsă de AuthComponent
         }
       }),
       catchError(this.handleError)
@@ -125,11 +141,8 @@ export class AuthService {
 
   register(data: RegistrationData): Observable<any> {
     const registerUrl = `${this.getApiUrl()}/auth/register`;
-    console.log(`AuthService: Attempting registration to ${registerUrl} with data:`, data);
     return this.http.post<any>(registerUrl, data).pipe(
-      tap(response => {
-        console.log('AuthService - Registration successful response:', response);
-      }),
+      tap(response => console.log('[AuthService Register] Response:', response)),
       catchError(this.handleError)
     );
   }
@@ -143,7 +156,7 @@ export class AuthService {
     localStorage.setItem('currentUser', JSON.stringify(user));
     this.currentTokenSubject.next(token);
     this.currentUserSubject.next(user);
-    console.log('AuthService - Stored auth data. User:', user, 'Token:', token);
+    console.log('[AuthService] Stored auth data. User:', user.email, 'Role:', user.userRole);
   }
 
   logOut(): void {
@@ -151,12 +164,11 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     this.currentTokenSubject.next(null);
     this.currentUserSubject.next(null);
-    console.log('AuthService - User logged out.');
+    console.log('[AuthService] User logged out.');
     this.router.navigate(['/auth']);
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('AuthService - HTTP Error:', error);
     let errorMessage = 'An unknown error occurred with the request!';
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Network/Client Error: ${error.error.message}`;
@@ -165,13 +177,14 @@ export class AuthService {
         errorMessage = `Server Error (${error.status}): ${error.error.message}`;
       } else if (error.error && typeof error.error === 'string' && error.error.length < 200) {
         errorMessage = `Server Error (${error.status}): ${error.error}`;
-      } else if (error.message) {
-        errorMessage = `Request Error (${error.status}): ${error.message}`;
-      } else {
+      } else if (error.message && !error.error) { // Adăugat pentru a prinde mesajul de eroare din 'map'
+        errorMessage = error.message;
+      }
+      else {
         errorMessage = `Server Error (${error.status}). Please try again later.`;
       }
     }
-    console.error('AuthService - Parsed error message:', errorMessage);
-    return throwError(() => new Error(errorMessage));
+    console.error('[AuthService handleError] Parsed error message:', errorMessage, 'Original Error:', error);
+    return throwError(() => new Error(errorMessage)); // Returnează un nou obiect Error
   }
 }

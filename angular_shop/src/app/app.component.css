@@ -1,1 +1,65 @@
+.app-footer {
+  background-color: #2C2E24;
+  color: #5A5D4A;
+  padding: 30px 20px;
+  font-size: 0.9rem;
+  border-top: 1px solid #E0D8C7;
+  margin-top: auto;
+}
 
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left p {
+  margin: 0;
+  padding: 10px 0;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.footer-link {
+  color: #495057; /* Un gri mai închis pentru link-uri */
+  text-decoration: none;
+  margin-left: 25px;
+  transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out;
+}
+
+.footer-link:first-child {
+  margin-left: 0;
+}
+
+.footer-link:hover {
+  color: #222529; /* Un gri foarte închis la hover */
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-left {
+    margin-bottom: 15px;
+  }
+
+  .footer-right {
+    justify-content: center;
+  }
+
+  .footer-link {
+    margin: 0 10px;
+    display: inline-block;
+    padding: 8px 0;
+  }
+}
