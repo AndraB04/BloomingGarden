@@ -10,14 +10,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
-import { AuthService, User } from './services/auth.service';
+import { AuthService, User } from './services/auth.service'; // Asigură-te că User și AuthService sunt importate corect
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    CommonModule, // CommonModule este necesar pentru directive ca *ngIf, *ngFor
     RouterOutlet,
-    CommonModule,
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
@@ -33,28 +33,34 @@ export class AppComponent implements OnInit, OnDestroy {
   appName: string = '';
   appLogo: string | null = null;
   appOwner: string | null = null;
-  loggedInUser: User | null = null; // Folosește interfața User
+  loggedInUser: User | null = null;
   isAdmin: boolean = false;
-  toolbarColor: string = '#9B9B7A';
+  toolbarColor: string = '#9B9B7A'; // Sau preia din configurations
   currentYear: number = new Date().getFullYear();
-  private authSubscription: Subscription | undefined; // Fă-l private
+  private authSubscription: Subscription | undefined;
 
   constructor(
-    public appConfig: ConfigurationsService,
-    private authService: AuthService, // INJECTEAZĂ AuthService corectat
+    public appConfig: ConfigurationsService, // Presupunând că este folosit în template
+    private authService: AuthService,
     private router: Router
   ) {
     this.appName = this.appConfig.getAppName();
     this.appLogo = this.appConfig.getAppLogo();
     this.appOwner = this.appConfig.getAppOwner();
+    // this.toolbarColor = this.appConfig.getToolbarColor(); // Dacă ai o astfel de metodă
   }
 
   ngOnInit(): void {
-    // Acum authService.authStateChanged$ va exista și va emite starea utilizatorului
-    this.authSubscription = this.authService.authStateChanged$.subscribe((user) => {
-      console.log('AppComponent received user from AuthService:', user);
+    // --- MODIFICAREA CHEIE AICI ---
+    // Schimbă authStateChanged$ în currentUser$
+    this.authSubscription = this.authService.currentUser$.subscribe((user: User | null) => {
+      console.log('AppComponent - currentUser$ emitted:', user);
       this.loggedInUser = user;
-      this.updateIsAdmin();
+      this.updateIsAdmin(); // Actualizează starea de admin
+      // Dacă utilizatorul este null (delogat), sidebar-ul ar trebui probabil ascuns
+      if (!user) {
+        this.showSidebar = false;
+      }
     });
   }
 
@@ -65,16 +71,20 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   updateIsAdmin(): void {
-    this.isAdmin = this.loggedInUser?.userRole === 'ADMIN';
+    this.isAdmin = !!this.loggedInUser && this.loggedInUser.userRole === 'ADMIN'; // Verificare mai sigură
     console.log(
-      'AppComponent isAdmin updated:', this.isAdmin,
-      'based on userRole:', this.loggedInUser?.userRole,
-      'User object:', this.loggedInUser
+      'AppComponent - isAdmin updated:', this.isAdmin,
+      'based on userRole:', this.loggedInUser?.userRole
     );
   }
 
   toggleSidebar(): void {
-    this.showSidebar = !this.showSidebar;
+    // Poate vrei să permiți deschiderea sidebar-ului doar dacă utilizatorul e logat
+    if (this.loggedInUser) {
+      this.showSidebar = !this.showSidebar;
+    } else {
+      this.showSidebar = false; // Asigură-te că e închis dacă nu e nimeni logat
+    }
   }
 
   closeSidebar(): void {
@@ -82,14 +92,16 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   goToDashboard(): void {
-    this.router.navigate(['/', 'dashboard']);
+    if (this.isAdmin) { // Permite doar dacă e admin
+      this.router.navigate(['/dashboard']); // Calea corectă pentru dashboard
+    }
     this.closeSidebar();
   }
 
   logOut(): void {
-    this.authService.logout(); // Apelează logout pe AuthService
-    // Subscripția la authStateChanged$ se va ocupa de actualizarea loggedInUser și isAdmin
-    this.router.navigate(['/', 'auth']);
-    this.closeSidebar();
+    this.authService.logOut(); // Metoda logOut din AuthService se ocupă de ștergerea datelor și redirect
+    // this.router.navigate(['/auth']); // Nu mai e necesar aici, AuthService.logOut() o face
+    this.closeSidebar(); // Asigură-te că sidebar-ul se închide la logout
+    // loggedInUser și isAdmin vor fi actualizate automat prin subscripția la currentUser$
   }
 }
