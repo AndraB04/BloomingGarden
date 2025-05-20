@@ -1,13 +1,16 @@
-// src/app/app.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms'; // Needed for ngModel, ngForm, ngSubmit
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon'; // Import MatIconRegistry
 import { MatButtonModule } from '@angular/material/button';
+import { DomSanitizer } from '@angular/platform-browser'; // Import DomSanitizer
 
 import { ConfigurationsService } from './services/configurations.service';
 import { AuthService, User } from './services/auth.service';
@@ -20,9 +23,12 @@ import { ToolbarComponent } from './shared/toolbar/toolbar.component';
   imports: [
     CommonModule,
     RouterOutlet,
+    FormsModule,
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatButtonModule,
     SidebarComponent,
     ToolbarComponent,
@@ -35,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
   appName: string = '';
   appLogo: string | null = null;
   appOwner: string | null = null;
-  toolbarColor: string = ''; // Inițializează cu o valoare default sau preia din config
+  toolbarColor: string = '';
 
   loggedInUser: User | null = null;
   isAdmin: boolean = false;
@@ -44,22 +50,31 @@ export class AppComponent implements OnInit, OnDestroy {
   private authSubscription: Subscription | undefined;
 
   constructor(
-    public appConfig: ConfigurationsService, // Public dacă e folosit direct în template
+    public appConfig: ConfigurationsService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private matIconRegistry: MatIconRegistry, // Inject MatIconRegistry
+    private domSanitizer: DomSanitizer     // Inject DomSanitizer
   ) {
     this.appName = this.appConfig.getAppName();
     this.appLogo = this.appConfig.getAppLogo();
     this.appOwner = this.appConfig.getAppOwner();
+
+    // Register SVG icons
+    this.matIconRegistry.addSvgIcon(
+      'instagram-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/instagram.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'facebook-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg')
+    );
   }
 
   ngOnInit(): void {
     this.authSubscription = this.authService.currentUser$.subscribe((user: User | null) => {
-      console.log('AppComponent - User state changed:', user);
       this.loggedInUser = user;
-      this.updateIsAdminStatus(); // Actualizează isAdmin pe baza noului user
-
-      // Închide sidebar-ul dacă utilizatorul se deloghează
+      this.updateIsAdminStatus();
       if (!user) {
         this.showSidebar = false;
       }
@@ -74,7 +89,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private updateIsAdminStatus(): void {
     this.isAdmin = !!this.loggedInUser && this.loggedInUser.userRole === 'ADMIN';
-    console.log(`AppComponent - isAdmin: ${this.isAdmin}, Role: ${this.loggedInUser?.userRole}`);
   }
 
   toggleSidebar(): void {
@@ -94,5 +108,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logOut(): void {
     this.authService.logOut();
+    this.closeSidebar();
+  }
+
+  onSubscribeNewsletter(formValue?: { email: string }): void {
+    if (formValue && formValue.email) {
+      console.log('Newsletter subscription email:', formValue.email);
+      // Implement actual subscription logic here (e.g., API call)
+      alert(`Thank you for subscribing, ${formValue.email}! (Placeholder)`);
+    } else {
+      console.error('Newsletter form submitted without a valid email.');
+    }
   }
 }
