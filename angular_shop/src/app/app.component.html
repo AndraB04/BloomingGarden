@@ -19,6 +19,8 @@
     ></app-sidebar>
   </mat-drawer>
 
+
+
   <div class="drawer-sidenav-content">
     <app-toolbar
       [appName]="appName"
@@ -30,8 +32,17 @@
       <router-outlet></router-outlet>
     </div>
 
+    <div class="drawer-sidenav-content">
+      <app-toolbar
+        [appName]="appName"
+        [toolbarColor]="toolbarColor"
+        (toggleSidebar)="toggleSidebar()"
+        (navigateToHome)="onNavigateToHomeRequested()"
+      ></app-toolbar>
+    </div>
 
-    <footer class="app-footer">
+
+      <footer class="app-footer">
       <div class="footer-top-section">
         <div class="footer-logo-social">
           <img src="https://i.imgur.com/SPhYTTC.png" alt="Blooming Garden Logo" class="footer-brand-logo">
@@ -58,8 +69,11 @@
         <div class="footer-column">
           <h4>ONLINE STORE</h4>
           <ul>
-            <li><a routerLink="/order-online" class="footer-nav-link">Order online</a></li>
-            <li><a routerLink="/auth" class="footer-nav-link">My Account</a></li>
+            <li>
+              <span class="footer-nav-link" (click)="navigateTo('/order-online')" role="link" tabindex="0" (keydown.enter)="navigateTo('/order-online')" (keydown.space)="navigateTo('/order-online')">Order online</span>
+            </li>
+            <li>
+              <span class="footer-nav-link" (click)="navigateTo('/auth')" role="link" tabindex="0" (keydown.enter)="navigateTo('/auth')" (keydown.space)="navigateTo('/auth')">My Account</span>
           </ul>
         </div>
 

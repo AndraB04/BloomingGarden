@@ -1,18 +1,70 @@
-/* src/app/shared/toolbar/toolbar.component.css */
-.fixed-header {
+:host {
+  display: block;
+}
+
+:host mat-toolbar.fixed-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1030;
+  padding: 0 16px;
+  height: 64px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.08),
+  0 4px 5px 0 rgba(0, 0, 0, 0.06),
+  0 1px 10px 0 rgba(0, 0, 0, 0.05);
   background-color: #5A5D4A;
   color: white;
+  display: flex;
+  align-items: center;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
 }
 
-.example-spacer {
-  flex: 1 1 auto;
+:host mat-toolbar.fixed-header .toolbar-app-title-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+:host mat-toolbar.fixed-header .toolbar-app-title {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  line-height: normal;
+  display: block;
 }
 
 
 
+:host mat-toolbar.fixed-header app-cart-button {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+:host mat-toolbar.fixed-header button[mat-icon-button] {
+  color: white;
+}
+:host mat-toolbar.fixed-header button[mat-icon-button] mat-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+@media (max-width: 600px) {
+  :host mat-toolbar.fixed-header {
+    height: 56px;
+    padding: 0 8px;
+  }
+  :host mat-toolbar.fixed-header .toolbar-app-title-link .toolbar-app-title,
+  :host mat-toolbar.fixed-header .toolbar-app-title {
+    font-size: 1.15rem;
+  }
+}

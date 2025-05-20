@@ -1,8 +1,12 @@
 <mat-toolbar class="fixed-header" [style.backgroundColor]="toolbarColor">
-  <button mat-icon-button (click)="toggleSidebar.emit()">
+  <button mat-icon-button (click)="toggleSidebar.emit()" aria-label="Toggle sidebar">
     <mat-icon>menu</mat-icon>
   </button>
-  <span>{{ appName }}</span>
+
+  <span class="toolbar-app-title-link" (click)="onAppNameClick()" role="button" tabindex="0">
+    <span class="toolbar-app-title">{{ appName }}</span>
+  </span>
+
   <span class="example-spacer"></span>
   <app-cart-button></app-cart-button>
 </mat-toolbar>

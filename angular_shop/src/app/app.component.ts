@@ -106,11 +106,23 @@ export class AppComponent implements OnInit, OnDestroy {
     this.closeSidebar();
   }
 
+  onNavigateToHomeRequested(): void { // <<--- NOUA METODĂ
+    console.log('AppComponent: Navigating to home page requested from toolbar.');
+    this.router.navigate(['/home']);
+    this.closeSidebar(); // Opcional, dacă sidebar-ul ar putea fi deschis
+  }
+
   logOut(): void {
     this.authService.logOut();
     this.closeSidebar();
   }
 
+  navigateTo(path: string): void {
+    if (path) {
+      this.router.navigate([path]);
+      this.closeSidebar(); // Dacă este apelat din sidebar, închide-l
+    }
+  }
   onSubscribeNewsletter(formValue?: { email: string }): void {
     if (formValue && formValue.email) {
       console.log('Newsletter subscription email:', formValue.email);
