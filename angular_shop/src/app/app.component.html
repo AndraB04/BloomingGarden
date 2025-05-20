@@ -1,4 +1,4 @@
-<!-- src/app/app.component.html -->
+
 <mat-drawer-container class="drawer-container" autosize>
   <mat-drawer
     #drawer="matDrawer"
@@ -30,7 +30,7 @@
       <router-outlet></router-outlet>
     </div>
 
-    <!-- ÎNTREGUL FOOTER ÎN INTERIORUL ACESTUI TAG -->
+
     <footer class="app-footer">
       <div class="footer-top-section">
         <div class="footer-logo-social">
@@ -46,7 +46,6 @@
       <hr class="footer-divider">
 
       <div class="footer-main-content">
-        <!-- COLOANA 1 -->
         <div class="footer-column">
           <h4>OUR STORES</h4>
           <ul>
@@ -56,7 +55,6 @@
           </ul>
         </div>
 
-        <!-- COLOANA 2 -->
         <div class="footer-column">
           <h4>ONLINE STORE</h4>
           <ul>
@@ -65,7 +63,6 @@
           </ul>
         </div>
 
-        <!-- COLOANA 3 -->
         <div class="footer-column">
           <h4>CONTACT US</h4>
           <ul>
@@ -74,7 +71,6 @@
           </ul>
         </div>
 
-        <!-- COLOANA 4 - MORE INFORMATION - ACUM ESTE ÎN INTERIORUL .footer-main-content -->
         <div class="footer-column">
           <h4>MORE INFORMATION</h4>
           <p class="newsletter-text">Subscribe to the newsletter</p>
@@ -85,11 +81,11 @@
             <button mat-flat-button type="submit" class="newsletter-button" [disabled]="!newsletterForm.form.valid">OK</button>
           </form>
         </div>
-      </div> <!-- Sfârșitul .footer-main-content -->
+      </div>
 
       <div class="footer-bottom-bar">
         <div class="footer-bottom-left">
-          <span>Blooming Garden</span> <!-- Sau {{ appName }} -->
+          <span>Blooming Garden</span>
         </div>
         <div class="footer-bottom-center">
           <span>EN</span>
@@ -100,7 +96,7 @@
           <a routerLink="/privacy-policy" class="footer-bottom-link">Privacy policy</a>
         </div>
       </div>
-    </footer> <!-- Sfârșitul .app-footer -->
+    </footer>
 
-  </div> <!-- Sfârșitul .drawer-sidenav-content -->
+  </div>
 </mat-drawer-container>
