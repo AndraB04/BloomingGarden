@@ -31,12 +31,12 @@ import {ConfigurationsService} from "../services/configurations.service";
 export class HomeComponent {
   banners = [
     {
-      imageUrl: 'https://i.pinimg.com/736x/70/6c/92/706c9219f11f0eef6671126929e5e5b0.jpg',
+      imageUrl: 'https://chauvinparis.com/wp-content/uploads/2020/11/0647.jpg',
       redirectUrl: '/products',
       buttonText: 'Shop Now'
     },
     {
-      imageUrl: 'https://i.pinimg.com/736x/c9/e2/1a/c9e21a41c9eb47a538b403e9d5ba392e.jpg',
+      imageUrl: 'https://images.squarespace-cdn.com/content/v1/5a6a90197131a5be62ea265b/1579750697481-O6T7MS06PUPRAF5MMGFH/florist+near+me+new+orleans+mitchs+flowers+stephanie+tarrant+monique+chauvin+baby+shower+flowers.jpg',
       redirectUrl: '/auth',
       buttonText: 'Create an account'
     }
