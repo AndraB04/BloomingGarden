@@ -1,3 +1,4 @@
+
 import {Component} from '@angular/core';
 import {MatButtonModule} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
@@ -9,6 +10,7 @@ import {AuthService} from "../services/auth.service";
 import {CustomerService} from "../services/customer.service";
 import {Router} from "@angular/router";
 import {ConfigurationsService} from "../services/configurations.service";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-auth',
@@ -21,7 +23,8 @@ import {ConfigurationsService} from "../services/configurations.service";
     ReactiveFormsModule,
     NgSwitch,
     NgSwitchCase,
-    NgIf
+    NgIf,
+    MatCheckboxModule
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css'
@@ -96,6 +99,15 @@ export class AuthComponent {
       );
     }
   }
+
+  // Metoda onForgotPassword pe care am adăugat-o anterior
+  onForgotPassword(): void {
+    console.log('Forgot password link clicked!');
+    alert('Funcționalitatea de resetare parolă va fi implementată aici!');
+    // Aici ai putea naviga către o altă pagină sau deschide un dialog
+    // this.router.navigate(['/forgot-password']);
+  }
+
 
   getErrorMessage(formControl: any) {
     if (formControl.hasError('required')) {
