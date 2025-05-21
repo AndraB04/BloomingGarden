@@ -22,20 +22,106 @@ body, html {
 }
 
 .drawer-sidenav-content {
-  margin-top: 64px;
-  padding-top: 1rem;
+  margin-top: -250px;
+  padding-top: 0;
   padding-bottom: 1rem;
-  /* Ensure no horizontal padding here if .container is used inside */
   padding-left: 0;
   padding-right: 0;
 }
 
 .main-content {
   padding-top: 30px;
-  /* Ensure no horizontal padding here if .container is used inside */
   padding-left: 0;
   padding-right: 0;
 }
+
+/* HERO SECTION CSS - MODIFIED FOR PRADA STYLE */
+.hero-video-section {
+  position: relative;
+  width: 100%;
+  height: 150vh; /* Adjust height as needed */
+  overflow: hidden;
+  display: flex;
+  align-items: center; /* Center content vertically */
+  justify-content: flex-start; /* Align content to the left */
+}
+
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  background-size: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1); /* Lighter dark overlay for less impact */
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  color: white;
+  padding: 0 clamp(40px, 8vw, 120px); /* Increased padding from left for alignment */
+  text-align: left;
+  max-width: 800px;
+}
+
+.hero-title {
+  font-family: 'Arial', sans-serif; /* Changed to a generic sans-serif, specify if you have Prada's exact font */
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  margin-bottom: 0.2rem; /* Reduced margin below title */
+  font-weight: 700; /* Made bolder */
+  text-transform: uppercase; /* As seen in some Prada examples */
+  text-shadow: none; /* Removed text shadow for cleaner look */
+  letter-spacing: 1px; /* Subtle letter spacing */
+}
+
+.hero-subtitle {
+  font-family: 'Arial', sans-serif; /* Changed to a generic sans-serif */
+  font-size: clamp(1rem, 2.5vw, 1.4rem); /* Slightly adjusted */
+  margin-bottom: 2.5rem; /* Increased margin below subtitle to separate from buttons */
+  text-shadow: none; /* Removed text shadow */
+  font-weight: 400; /* Lighter weight */
+  line-height: 3.4;
+}
+
+.hero-buttons {
+  display: flex; /* To arrange buttons side-by-side */
+  gap: 15px; /* Space between buttons */
+}
+
+.hero-buttons .mat-button {
+  background-color: transparent; /* Transparent background */
+  color: white;
+  border: 1px solid white; /* White border as seen in example */
+  padding: 0.7rem 1.8rem; /* Adjusted padding for button size */
+  min-width: unset; /* Remove default min-width if any */
+  line-height: 1; /* Adjust line height for vertical centering of text */
+  text-transform: uppercase; /* Uppercase text */
+  font-size: clamp(0.75rem, 1.8vw, 0.9rem); /* Responsive font size for buttons */
+  font-weight: 500;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border-radius: 0; /* Sharp corners like the example */
+}
+
+.hero-buttons .mat-button:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover background */
+  border-color: white;
+}
+
+/* Existing CSS below */
 
 .card-menu-button {
   width: clamp(250px, 30vw, 350px);
@@ -158,7 +244,7 @@ body, html {
   display: flex;
   overflow-x: auto;
   gap: 20px;
-  padding: 10px 5px 20px 5px; /* Keep this internal padding for scrollable banners */
+  padding: 10px 5px 20px 5px;
   margin-bottom: 30px;
   scroll-snap-type: x mandatory;
 }
@@ -232,13 +318,23 @@ body, html {
 
 .container {
   width: 96%;
-
-  margin: 0 auto; /* Keep margin auto to center if ever needed, but padding dominates */
-  padding: 0 clamp(16px, 2vw, 30px); /* Adjusted padding to be smaller, making content wider */
-  /* You can adjust the 30px value here. 2vw means 2% of viewport width for fluid padding */
+  margin: 0 auto;
+  padding: 0 clamp(16px, 2vw, 30px);
 }
 
 @media (max-width: 992px) {
+  .hero-video-section {
+    height: 50vh;
+  }
+  .hero-content {
+    padding: 0 clamp(20px, 5vw, 60px); /* Adjust padding for smaller screens */
+  }
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+  .hero-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+  }
   .card-about-us {
     min-height: auto;
     width: 100%;
@@ -251,7 +347,6 @@ body, html {
   .text-content {
     flex-basis: 100%;
     text-align: center;
-    order: 1;
     justify-content: flex-start;
   }
   .img-section {
@@ -279,9 +374,22 @@ body, html {
     width: min(280px, 85vw);
     background-color: #5A5D4A;
   }
-  .banner-button {
-    font-size: clamp(0.7rem, 3.5vw, 0.9rem);
-    padding: clamp(6px, 1.5vh, 10px) clamp(12px, 4vw, 20px);
+  .hero-video-section {
+    height: 40vh;
+  }
+  .hero-content {
+    padding: 0 clamp(15px, 4vw, 40px); /* Further adjust padding for very small screens */
+  }
+  .hero-title {
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+  }
+  .hero-subtitle {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+  }
+  .hero-buttons .mat-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
   }
   .card-about-us {
     margin: clamp(8px, 2vw, 15px) 0;
@@ -304,9 +412,6 @@ body, html {
   .banner-card {
     padding-top: 30%;
   }
-}
-
-@media (min-width: 1600px) {
 }
 
 .app-footer {

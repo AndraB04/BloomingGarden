@@ -1,4 +1,4 @@
-<mat-drawer-container class="drawer-container" autosize >
+<mat-drawer-container class="drawer-container" autosize>
   <mat-drawer #drawer class="drawer-sidenav" mode="over">
     <div style="display: flex; justify-content: flex-end; padding: 1rem;">
       <button mat-icon-button (click)="drawer.close()">
@@ -38,6 +38,18 @@
       <app-cart-button></app-cart-button>
     </mat-toolbar>
 
+    <div class="hero-video-section">
+      <video class="hero-video" autoplay loop muted playsinline #heroVideo> <source src="assets/videos/hero_video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">Blooming Garden</h1>
+        <p class="hero-subtitle">Fresh Flowers for Every Occasion</p>
+        <div class="hero-buttons">
+        </div>
+      </div>
+    </div>
     <div class="main-content">
       <div class="container">
         <div class="banners-container">
