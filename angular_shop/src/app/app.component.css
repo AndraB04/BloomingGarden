@@ -16,11 +16,11 @@
   justify-content: center;
 }
 
-/*.footer-logo-social {*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  align-items: center;*/
-/*}*/
+.footer-logo-social {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .footer-brand-logo {
   max-height: 250px;
