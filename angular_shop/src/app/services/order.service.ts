@@ -16,9 +16,11 @@ export class OrderService {
   }
 
   public addToCart(product: any): void {
+    console.log('OrderService - addToCart: Product received:', product); // <--- ADD THIS LOG
     let products = this.cartObservable.getValue();
     products.push(product);
     this.cartObservable.next(products);
+    console.log('OrderService - addToCart: Current cart contents:', products); // <--- ADD THIS LOG
   }
 
   public removeFromCart(product: any): void {
