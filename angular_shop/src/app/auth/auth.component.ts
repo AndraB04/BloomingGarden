@@ -59,9 +59,7 @@ export class AuthComponent {
           console.log('Login with success!');
 
           console.log(response);
-
-          this.customer.setLoggedUser(response.data);
-
+          
           this.resetLoginForm();
 
           this.router.navigate(['/', 'home']);
