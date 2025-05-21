@@ -23,7 +23,6 @@ import {CartButtonComponent} from "../home/cart-button/cart-button.component";
   imports: [
     MatButtonModule,
     MatCardModule,
-    NgForOf,
     NgIf,
     TitleCasePipe,
     MatToolbarModule,
@@ -52,17 +51,21 @@ export class ProductDetailsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // Retrieve ID from URL parameter
     this.route.params.subscribe(params => {
       let id = params['id'];
 
       if (id != null) {
         this.productService.getProductById(id).subscribe((response: any) => {
-          console.log(response);
-          this.productData = response.data;
-        })
+          console.log('ProductDetailsComponent - getProductById response:', response); // <--- ADD THIS LOG
+          if (response && response.data) { // Ensure response and data exist
+            this.productData = response.data;
+            console.log('ProductDetailsComponent - productData set to:', this.productData); // <--- ADD THIS LOG
+          } else {
+            console.error('ProductDetailsComponent - getProductById: No data found in response.', response);
+          }
+        });
       }
-      console.log('ID from URL:', id);
+      console.log('ProductDetailsComponent - ID from URL:', id);
     });
   }
 
@@ -87,11 +90,19 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onBuy(): void {
+    console.log('ProductDetailsComponent - onBuy: Attempting to add product to cart.');
+    console.log('Product Data being added:', this.productData); // <--- ADD THIS LOG
+
     if (this.customerService.getLoggedUser() == null) {
       alert("Utilizatorul nu este logat, trebuie sa te loghezi inainte sa adaugi produse in cos");
       this.router.navigate(["/", "auth"]);
     } else {
-      this.orderService.addToCart(this.productData);
+      if (this.productData) { // <--- ADD THIS CHECK
+        this.orderService.addToCart(this.productData);
+      } else {
+        console.error('ProductDetailsComponent - onBuy: productData is null or undefined!');
+        alert('Cannot add to cart: Product details not loaded.'); // <--- Optional: a more descriptive alert
+      }
     }
   }
 

@@ -1,15 +1,17 @@
+// home.component.ts
+
 import { Component } from '@angular/core';
-import {MatSidenavModule} from "@angular/material/sidenav";
-import {MatButtonModule} from "@angular/material/button";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatIconModule} from "@angular/material/icon";
-import {MatCardModule} from "@angular/material/card";
-import {Router} from "@angular/router";
-import {ListProductsComponent} from "../list-products/list-products.component"; // <-- Import ListProductsComponent
-import {CartButtonComponent} from "./cart-button/cart-button.component";
-import {CustomerService} from "../services/customer.service";
-import {NgFor, NgIf} from "@angular/common";
-import {ConfigurationsService} from "../services/configurations.service";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatButtonModule } from "@angular/material/button";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { Router } from "@angular/router";
+import { ListProductsComponent } from "../list-products/list-products.component";
+import { CartButtonComponent } from "./cart-button/cart-button.component";
+import { CustomerService } from "../services/customer.service";
+import { NgFor, NgIf } from "@angular/common";
+import { ConfigurationsService } from "../services/configurations.service";
 
 @Component({
   selector: 'app-home',
@@ -47,13 +49,15 @@ export class HomeComponent {
     private router: Router,
     public customerService: CustomerService
   ) {}
-  isUserAdmin(){
-    if(this.customerService.getLoggedUser() != null && this.customerService.getLoggedUser().userRole == "ADMIN"){
+
+  isUserAdmin(): boolean { // Add return type for clarity
+    const loggedUser = this.customerService.getLoggedUser(); // Store the result in a variable
+    if (loggedUser != null && loggedUser.userRole == "ADMIN") {
       return true;
     }
     return false;
-
   }
+
   public currentYear: number = new Date().getFullYear();
 
   onDashboard(){
@@ -65,5 +69,4 @@ export class HomeComponent {
   navigateTo(url: string) {
     this.router.navigate([url]);
   }
-
 }
