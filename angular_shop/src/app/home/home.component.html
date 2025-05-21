@@ -1,4 +1,4 @@
-<mat-drawer-container class="drawer-container"  autosize >
+<mat-drawer-container class="drawer-container" autosize >
   <mat-drawer #drawer class="drawer-sidenav" mode="over">
     <div style="display: flex; justify-content: flex-end; padding: 1rem;">
       <button mat-icon-button (click)="drawer.close()">
@@ -39,38 +39,38 @@
     </mat-toolbar>
 
     <div class="main-content">
-
-      <div class="banners-container">
-        <mat-card *ngFor="let banner of banners" class="banner-card">
-          <img [src]="banner.imageUrl" alt="Promotional banner" class="banner-image" />
-          <button mat-raised-button color="primary" class="banner-button" (click)="navigateTo(banner.redirectUrl)">
-            {{ banner.buttonText }}
-          </button>
-        </mat-card>
+      <div class="container">
+        <div class="banners-container">
+          <mat-card *ngFor="let banner of banners" class="banner-card">
+            <img [src]="banner.imageUrl" alt="Promotional banner" class="banner-image" />
+            <button mat-raised-button color="primary" class="banner-button" (click)="navigateTo(banner.redirectUrl)">
+              {{ banner.buttonText }}
+            </button>
+          </mat-card>
+        </div>
       </div>
-
-      <mat-card class="card-about-us">
-        <mat-card-title class="title-about-us">
-          Welcome to {{ appConfig.getAppName() }}
-        </mat-card-title>
-        <mat-card-content>
-          <div class="div-text">
-            <div class="text-content">
-              <p>Discover a world of endless possibilities.</p>
-              <p><strong>Unrivaled Selection:</strong> Explore thousands of products.</p>
-              <p><strong>Quality Assurance:</strong> Every product undergoes rigorous checks.</p>
-              <p><strong>Exceptional Value:</strong> Enjoy competitive prices.</p>
-            </div>
-            <img class="img-section" src="https://i.imgur.com/k3tI8to.jpeg" />
-          </div>
-        </mat-card-content>
-      </mat-card>
     </div>
 
+  </div>
+  <div class="container">
+    <mat-card class="card-about-us">
+      <mat-card-title class="title-about-us">
+        Welcome to {{ appConfig.getAppName() }}
+      </mat-card-title>
+      <mat-card-content>
+        <div class="div-text">
+          <div class="text-content">
+            <p>Discover a world of endless possibilities.</p>
+            <p><strong>Unrivaled Selection:</strong> Explore thousands of products.</p>
+            <p><strong>Quality Assurance:</strong> Every product undergoes rigorous checks.</p>
+            <p><strong>Exceptional Value:</strong> Enjoy competitive prices.</p>
+          </div>
+          <img class="img-section" src="https://i.imgur.com/k3tI8to.jpeg" />
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <app-list-products [isAdmin]="false"></app-list-products>
 
 </mat-drawer-container>
-
-
