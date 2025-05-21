@@ -5,7 +5,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCardModule} from "@angular/material/card";
 import {Router} from "@angular/router";
-import {ListProductsComponent} from "../list-products/list-products.component";
+import {ListProductsComponent} from "../list-products/list-products.component"; // <-- Import ListProductsComponent
 import {CartButtonComponent} from "./cart-button/cart-button.component";
 import {CustomerService} from "../services/customer.service";
 import {NgFor, NgIf} from "@angular/common";
@@ -21,9 +21,9 @@ import {ConfigurationsService} from "../services/configurations.service";
     MatIconModule,
     MatCardModule,
     CartButtonComponent,
+    ListProductsComponent,
     NgIf,
     NgFor
-
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
