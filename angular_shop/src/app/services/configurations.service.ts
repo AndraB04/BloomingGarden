@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ConfigurationsService {
   private apiUrl: string = 'http://localhost:8081/api';
-  private appName: string = 'Blooming Garden';
+  private appName: string = 'BLOOMING GARDEN';
   private appOwner: string = 'Bloom Collective';
   private appLogo: string =
     'https://i.imgur.com/SPhYTTC.png';

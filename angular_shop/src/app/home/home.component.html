@@ -46,8 +46,6 @@
       <div class="hero-content">
         <h1 class="hero-title">Blooming Garden</h1>
         <p class="hero-subtitle">Fresh Flowers for Every Occasion</p>
-        <div class="hero-buttons">
-        </div>
       </div>
     </div>
     <div class="main-content">
@@ -64,23 +62,16 @@
     </div>
 
   </div>
-  <div class="container">
-    <mat-card class="card-about-us">
-      <mat-card-title class="title-about-us">
-        Welcome to {{ appConfig.getAppName() }}
-      </mat-card-title>
-      <mat-card-content>
-        <div class="div-text">
-          <div class="text-content">
-            <p>Discover a world of endless possibilities.</p>
-            <p><strong>Unrivaled Selection:</strong> Explore thousands of products.</p>
-            <p><strong>Quality Assurance:</strong> Every product undergoes rigorous checks.</p>
-            <p><strong>Exceptional Value:</strong> Enjoy competitive prices.</p>
-          </div>
-          <img class="img-section" src="https://i.imgur.com/k3tI8to.jpeg" />
-        </div>
-      </mat-card-content>
-    </mat-card>
+
+  <div class="about-us-video-banner">
+    <video class="about-us-video" autoplay loop muted playsinline>
+      <source src="assets/videos/floral_design_placeholder.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay-content">
+      <h3 class="video-overlay-title">Our Vision</h3>
+      <p class="video-overlay-subtitle">Crafting beauty, one bloom at a time.</p>
+    </div>
   </div>
 
   <app-list-products [isAdmin]="false"></app-list-products>
