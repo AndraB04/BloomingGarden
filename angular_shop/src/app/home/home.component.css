@@ -17,12 +17,12 @@ body, html {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1000; /* Ensure header is above most content */
   box-shadow: 0 2px 4px #F9F1DC;
 }
 
 .drawer-sidenav-content {
-  margin-top: 30px;
+  margin-top: 30px; /* Adjust if your header height changes */
   padding-top: 0;
   padding-bottom: 1rem;
   padding-left: 0;
@@ -30,7 +30,7 @@ body, html {
 }
 
 .main-content {
-  padding-top: 30px;
+  padding-top: 30px; /* This might be redundant if drawer-sidenav-content already has margin-top for fixed-header */
   padding-left: 0;
   padding-right: 0;
 }
@@ -53,9 +53,9 @@ body, html {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: contain; /* Or 'cover' depending on desired video scaling */
   z-index: 1;
-  background-size: cover;
+  background-size: cover; /* This is for the .hero-video element, not a general background */
 }
 
 .hero-overlay {
@@ -71,9 +71,9 @@ body, html {
 .hero-content {
   position: absolute;
   top: 30%;
-  left: 10%; /* Ajustează poziția orizontală pentru a se potrivi cu imaginea de referință */
-  transform: translateY(-50%); /* Ajustează pentru a centra vertical după 'top' */
-  z-index: 3;
+  left: 10%;
+  transform: translateY(-50%);
+  z-index: 3; /* Above hero-overlay */
   color: white;
   text-align: left;
   max-width: 40%;
@@ -83,9 +83,9 @@ body, html {
 
 .hero-title {
   font-family: 'Arial', sans-serif;
-  font-size: clamp(2.5rem, 4.5vw, 3rem); /* Mărit pentru a fi mai vizibil */
+  font-size: clamp(2.5rem, 4.5vw, 3rem);
   margin-bottom: 0.5rem;
-  font-weight: bold; /* Făcut bold pentru a se potrivi cu imaginea */
+  font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   line-height: 1.2;
@@ -93,8 +93,8 @@ body, html {
 
 .hero-subtitle {
   font-family: 'Arial', sans-serif;
-  font-size: clamp(1.2rem, 2vw, 1.5rem); /* Mărit pentru a fi mai vizibil */
-  margin-bottom: 1.5rem; /* Mărit spațiul sub subtitlu */
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  margin-bottom: 1.5rem;
   font-weight: normal;
   line-height: 1.6;
 }
@@ -107,25 +107,25 @@ body, html {
 
 .hero-button-primary.mat-button {
   background-color: transparent;
-  color: white; /* Changed to white */
-  border: 1px solid white; /* Bordură pentru primul buton */
+  color: white;
+  border: 1px solid white;
   padding: 0.8rem 1.5rem;
   font-size: 0.9rem;
   text-transform: uppercase;
   font-weight: bold;
-  border-radius: 0; /* Fără border-radius pentru un aspect mai edgy */
+  border-radius: 0;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .hero-button-primary.mat-button:hover {
   background-color: white;
-  color: #333; /* Darker color on hover if background becomes white */
+  color: #333;
 }
 
 .hero-button-secondary.mat-button {
-  background-color: transparent; /* Fără fundal pentru al doilea buton */
-  color: white; /* Changed to white */
-  border: 1px solid transparent; /* Bordură transparentă pentru al doilea buton */
+  background-color: transparent;
+  color: white;
+  border: 1px solid transparent;
   padding: 0.8rem 1.5rem;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -135,8 +135,8 @@ body, html {
 }
 
 .hero-button-secondary.mat-button:hover {
-  background-color: #f0f0f0; /* Un fundal ușor la hover */
-  color: #333; /* Darker color on hover if background becomes light */
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .hero-image-container {
@@ -166,7 +166,7 @@ body, html {
   justify-content: center;
   margin-bottom: clamp(12px, 2vh, 20px);
   position: relative;
-  z-index: 1;
+  z-index: 1; /* Ensure logo is above other drawer content if overlapping */
   border-radius: 15px;
 }
 
@@ -179,99 +179,140 @@ body, html {
   border-radius: 15px;
 }
 
-.img-banner {
-  width: clamp(20px, 30%, 400px);
-  margin: clamp(12px, 2vw, 20px);
-  height: clamp(200px, 30vh, 300px);
-  border-radius: clamp(8px, 2vw, 12px);
-  object-fit: cover;
-}
+/* --- Styles for the "About Us" section with VIDEO BACKGROUND --- */
 
-/* --- Styles for the standalone video banner with text overlay --- */
-
-.about-us-video-banner {
-  position: relative; /* Crucial for positioning text overlay */
-  /* Adjust width to be within a virtual 'container' like area */
-  width: 96%; /* Take up most of the viewport width */
-  margin: clamp(30px, 5vw, 60px) auto; /* Add vertical margin and auto horizontal margin to center */
-  height: clamp(250px, 45vh, 400px); /* Set a height for the banner */
-  overflow: hidden; /* Hide anything outside the banner area */
-  border-radius: clamp(8px, 2vw, 12px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: flex; /* Use flex to center overlay content */
-  align-items: center; /* Vertically center overlay content */
-  justify-content: center; /* Horizontally center overlay content */
-  box-sizing: border-box; /* Include padding in the element's total width and height */
-  /* Add padding to account for typical page margins, since it's not inside a '.container' */
-  padding: 0 clamp(16px, 2vw, 30px);
-}
-
+/* Main container for the "About Us" banner */
 .about-us-video {
+  position: relative; /* Crucial for containing absolutely positioned children like the video */
+  width: 100%;
+  height: 90vh; /* Adjust height as desired, e.g., 90vh or clamp(500px, 90vh, 800px) */
+  display: flex;
+  align-items: center;      /* Vertically center the .video-overlay-content */
+  justify-content: flex-start; /* Align .video-overlay-content to the left */
+  padding-left: 8%;        /* Create space from the left edge for the text block */
+  padding-right: 8%;       /* Create space from the right edge */
+  box-sizing: border-box;
+  overflow: hidden;         /* Prevents content from spilling out */
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Styling for the ACTUAL <video> HTML element */
+.about-us-video > video {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures video covers the entire banner area */
-  z-index: 1; /* Place video behind overlay content */
+  object-fit: cover; /* Ensures the video covers the entire container, cropping if necessary */
+  z-index: 1;      /* Places the video layer BEHIND the text overlay */
 }
 
+/* Content overlay block (text part) */
 .video-overlay-content {
-  position: relative; /* Position relative to .about-us-video-banner */
-  z-index: 2; /* Place content above the video */
-  color: white; /* Text color for overlay */
-  text-align: center;
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.3); /* Slight background for readability */
-  border-radius: 8px;
-  max-width: 80%; /* Limit text width */
+  position: relative; /* Ensures it respects the flex layout of parent and stacking context */
+  z-index: 2;         /* Higher z-index to appear ON TOP of the video (z-index: 1) */
+  color: #2C2E24;       /* Text color - assuming dark video, adjust if needed. */
+  text-align: left;
+  max-width: 45%;     /* Adjust based on how much space text should take */
+  background-color: transparent; /* No background for the text block itself */
+  padding: 0;
+  border-radius: 0;
 }
 
+/* Title styling (e.g., "Days of Summer") */
 .video-overlay-title {
-  font-family: 'Playfair Display', serif !important;
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.7); /* Stronger text shadow for better contrast */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+  color: #2C2E24;
+  text-transform: none;
+  text-shadow: none; /* Add a subtle one if readability is an issue: e.g., 1px 1px 3px rgba(0,0,0,0.5) */
 }
 
+/* Subtitle styling (e.g., "Masculine codes...") */
 .video-overlay-subtitle {
-  font-size: clamp(1.0rem, 2.5vw, 1.4rem);
-  line-height: 1.5;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-shadow: none; /* Add a subtle one if readability is an issue */
+  max-width: 100%;
 }
 
-/* --- Media Queries for the standalone video banner --- */
-@media (max-width: 992px) {
-  .about-us-video-banner {
-    height: clamp(200px, 40vh, 350px); /* Adjust height for tablet/mobile */
-    padding: 0 clamp(16px, 2vw, 30px); /* Maintain horizontal padding */
+/* Styling for the call to action link/button */
+.about-us-cta-button {
+  display: inline-block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  font-weight: 600;
+  color: #2C2E24;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0;
+  text-decoration: none;
+  border: none;
+  background-color: transparent;
+  transition: opacity 0.3s ease;
+}
+
+.about-us-cta-button:hover {
+  opacity: 0.8;
+}
+
+/* --- Media Queries for the "About Us" banner --- */
+@media (max-width: 992px) { /* Tablet */
+  .about-us-video {
+    height: 70vh;
+    padding-left: 6%;
+    padding-right: 6%;
   }
   .video-overlay-content {
-    padding: 0.8rem;
+    max-width: 60%;
   }
   .video-overlay-title {
-    font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
   }
   .video-overlay-subtitle {
-    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    font-size: clamp(0.85rem, 1.4vw, 1rem);
+  }
+  .about-us-cta-button {
+    font-size: clamp(0.75rem, 1.1vw, 0.85rem);
   }
 }
 
-@media (max-width: 576px) {
-  .about-us-video-banner {
-    width: 96%; /* Full width minus horizontal padding */
-    height: clamp(180px, 35vh, 280px);
-    margin: clamp(20px, 4vw, 40px) auto; /* Adjust margin for smaller screens */
-    padding: 0 clamp(16px, 2vw, 30px);
+@media (max-width: 576px) { /* Mobile */
+  .about-us-video {
+    height: auto;
+    min-height: 60vh;
+    padding-top: 15%;
+    padding-bottom: 15%;
+    padding-left: 5%;
+    padding-right: 5%;
+    text-align: center;
+    justify-content: center;
+  }
+  .video-overlay-content {
+    max-width: 90%;
+    text-align: center;
   }
   .video-overlay-title {
-    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
   }
   .video-overlay-subtitle {
-    font-size: clamp(0.8rem, 3vw, 1.1rem);
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    margin-bottom: 2rem;
+  }
+  .about-us-cta-button {
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
   }
 }
+
 
 /* --- REMOVE THE FOLLOWING CSS RULES --- */
 /* The rules below are for elements not present in your current "About Us" HTML structure. */
@@ -325,7 +366,7 @@ body, html {
 
 .banner-card {
   position: relative;
-  flex: 0 0 49%;
+  flex: 0 0 49%; /* Two cards visible, adjust as needed */
   height: 650px;
   border-radius: 10px;
   overflow: hidden;
@@ -374,12 +415,12 @@ body, html {
   bottom: 38px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 2; /* Above the gradient overlay */
   border-radius: 25px;
-  padding: 30px 44px;
+  padding: 30px 44px; /* Note: Material Components might have their own padding. Use !important if needed or adjust component props */
   font-weight: 500;
   letter-spacing: 0.5px;
-  background-color: #6F725A !important;
+  background-color: #6F725A !important; /* Using !important to override Angular Material styles if necessary */
   color: white !important;
   box-shadow: 0 2px 5px rgba(0,0,0,0.25);
   transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -390,136 +431,91 @@ body, html {
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-.container {
+.container { /* General purpose container */
   width: 96%;
   margin: 0 auto;
-  padding: 0 clamp(16px, 2vw, 30px);
+  padding: 0 clamp(16px, 2vw, 30px); /* Responsive padding */
 }
 
-@media (max-width: 992px) {
+/* --- General Responsive Adjustments --- */
+
+@media (max-width: 992px) { /* Tablet and smaller */
   .hero-video-section {
     flex-direction: column;
-    height: auto;
+    height: auto; /* Adjust height for stacked content */
     padding: 5% 0;
   }
 
   .hero-content {
-    position: relative; /* Schimbat la relative pentru responsive */
+    position: relative;
     top: auto;
     left: auto;
     transform: none;
     max-width: 90%;
     padding: 0 5%;
-    text-align: center;
+    text-align: center; /* Center hero text on smaller screens */
     margin-bottom: 2rem;
   }
 
   .hero-image-container {
-    width: 90%;
+    width: 90%; /* Adjust image container width */
   }
 
   .hero-title {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: clamp(1rem, 2.5vw, 1.2rem); /* Adjust font sizes */
   }
 
   .hero-subtitle {
     font-size: clamp(0.7rem, 1.5vw, 0.9rem);
   }
 
-  /* --- MODIFIED ABOUT US SECTION FOR MEDIA QUERIES --- */
-  .card-about-us {
-    flex-direction: column; /* Revert to column for smaller screens */
-    align-items: center; /* Center items when stacked */
-    text-align: center; /* Center text on small screens */
-    gap: clamp(20px, 3vw, 40px); /* Adjust gap for mobile */
-  }
-  .title-about-us {
-    flex-basis: auto; /* Reset flex-basis for mobile */
-    max-width: 100%; /* Title takes full width */
-    font-size: clamp(1.3rem, 3.5vw, 1.8rem);
-    text-align: center; /* Center title on small screens */
-    padding-bottom: clamp(8px, 1.5vh, 12px);
-  }
-  .title-about-us::after {
-    margin: clamp(8px, 1.5vh, 12px) auto 0; /* Center underline on small screens */
-  }
-  /* NEW WRAPPER FOR THE RIGHT CONTENT */
-  .right-content-wrapper {
-    flex-basis: auto; /* Reset for mobile */
-    max-width: 100%; /* Take full width for mobile */
-    align-items: center; /* Center for mobile */
-  }
-
-  .div-text {
-    width: 100%; /* Take full width for mobile */
-    align-items: center; /* Center content block on small screens */
-  }
-  .text-content {
-    text-align: center; /* Center text content on small screens */
-    margin-bottom: clamp(15px, 2.5vh, 25px); /* Adjust margin for mobile */
-  }
-  .text-content p {
-    text-align: center; /* Center paragraphs on small screens */
-  }
-  .img-section {
-    width: clamp(250px, 80vw, 400px); /* Adjust image width for mobile */
-    align-self: center; /* Center image on small screens */
-  }
-  /* --- END MODIFIED ABOUT US SECTION FOR MEDIA QUERIES --- */
-
   .banner-card {
+    flex: 0 0 80%; /* Show more of one card, or adjust for one full card */
     max-width: 80%;
   }
   .card-menu-button {
-    width: 5%;
+    /* width: 5%; */ /* This seems too small, check if it was intended for something else or a typo */
+    /* If this is for the menu buttons in the sidenav, their width is already defined more robustly */
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 576px) { /* Mobile */
   .drawer-sidenav {
-    width: min(280px, 85vw);
-    background-color: #5A5D4A;
+    width: min(280px, 85vw); /* Sidenav width for mobile */
+    background-color: #5A5D4A; /* Example color for sidenav */
   }
+
   .hero-video-section {
-    height: auto;
-    padding: 5% 0;
+    /* height: auto; */ /* Already set in 992px query */
+    /* padding: 5% 0; */ /* Already set in 992px query */
   }
+
   .hero-content {
-    padding: 0 5%;
+    /* padding: 0 5%; */ /* Already set in 992px query */
   }
+
   .hero-title {
     font-size: clamp(0.9rem, 2vw, 1rem);
   }
+
   .hero-subtitle {
     font-size: clamp(0.6rem, 1.2vw, 0.8rem);
   }
+
   .hero-buttons {
-    flex-direction: column; /* Butoanele pe coloană pentru mobile */
+    flex-direction: column;
     gap: 0.5rem;
   }
+
   .hero-button-primary.mat-button,
   .hero-button-secondary.mat-button {
-    width: 100%; /* Butoanele pe toată lățimea */
+    width: 100%; /* Full width buttons on mobile */
   }
-  /* --- MODIFIED ABOUT US SECTION FOR MEDIA QUERIES --- */
-  .card-about-us {
-    margin: clamp(8px, 2vw, 15px) 0;
-    padding: clamp(16px, 3.5vw, 24px);
-    max-width: 100%;
-    width: 100%;
-  }
-  .title-about-us {
-    font-size: clamp(1.2rem, 5vw, 1.6rem);
-  }
-  .text-content p {
-    font-size: clamp(0.9rem, 3vw, 1rem);
-  }
-  .img-section {
-    width: clamp(180px, 80vw, 280px);
-  }
-  /* --- END MODIFIED ABOUT US SECTION FOR MEDIA QUERIES --- */
+
   .banner-card {
-    padding-top: 30%;
+    flex: 0 0 95%; /* Nearly full width for single card scrolling on mobile */
+    /* padding-top: 30%; */ /* This seems like an odd padding, usually height/aspect-ratio is used */
+    height: 500px; /* Example fixed height for mobile banners */
   }
 }
 
@@ -536,13 +532,17 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  gap: 15px; /* Add gap for wrapped items */
 }
 
 .footer-link {
   margin-left: 20px;
   text-decoration: none;
   color: #555;
+}
+.footer-link:first-child {
+  margin-left: 0; /* Remove margin for the first link if they wrap */
 }
 
 .footer-link:hover {
