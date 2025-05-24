@@ -1,28 +1,31 @@
-<div class="main-content">
-  <mat-drawer-container class="drawer-container" autosize>
-    <div class="div-logo" style="margin-bottom: 30px; margin-top: 15vh">
-      <img class="img-logo" [src]="appConfig.getAppLogo()"/>
-    </div>
+<div class="title-container-wrapper">
+  <div class="admin-title-banner">
+    <h2 class="admin-panel-title">ADMINISTRATION PANEL</h2>
+  </div>
 
-    <div class="div-controls-menu">
-      <button mat-raised-button
-              class="btn-save margin-bottom pink-button"
-              (click)="onManger('customers')">
-        customer manager
-      </button>
-      <button mat-raised-button
-              class="btn-save margin-bottom pink-button"
-              (click)="onManger('products')">
-        products manager
-      </button>
-      <button mat-raised-button
-              class="btn-save margin-bottom pink-button"
-              (click)="onManger('orders')">
-        orders manager
-      </button>
-    </div>
-  </mat-drawer-container>
+  <div class="div-logo">
+    <img class="img-logo" [src]="appConfig.getAppLogo()" alt="Blooming Garden Logo"/>
+  </div>
 
-  <!-- Dacă ai rute copii pentru products-manager etc. -->
+  <div class="div-controls-menu">
+    <button mat-raised-button
+            class="dashboard-nav-button"
+            (click)="onManger('customers')">
+      customer manager
+    </button>
+    <button mat-raised-button
+            class="dashboard-nav-button"
+            (click)="onManger('products')">
+      products manager
+    </button>
+    <button mat-raised-button
+            class="dashboard-nav-button"
+            (click)="onManger('orders')">
+      orders manager
+    </button>
+  </div>
+</div>
+
+<div class="routed-content-area">
   <router-outlet></router-outlet>
 </div>
