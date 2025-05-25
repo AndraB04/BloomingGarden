@@ -17,7 +17,8 @@
   color: white;
   display: flex;
   align-items: center;
-  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  font-family: 'Arial', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 3rem);
 }
 
 :host mat-toolbar.fixed-header .toolbar-app-title-link {

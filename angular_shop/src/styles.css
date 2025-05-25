@@ -6,6 +6,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .example-spacer {
   flex: 1 1 auto;
 }
+.main-content {
+  padding-top: 30px;
+}
 
 .margin-bottom {
   margin-bottom: 16px;

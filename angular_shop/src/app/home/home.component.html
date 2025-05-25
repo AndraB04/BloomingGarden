@@ -1,4 +1,4 @@
-<mat-drawer-container class="drawer-container"  autosize >
+<mat-drawer-container class="drawer-container" autosize>
   <mat-drawer #drawer class="drawer-sidenav" mode="over">
     <div style="display: flex; justify-content: flex-end; padding: 1rem;">
       <button mat-icon-button (click)="drawer.close()">
@@ -38,39 +38,40 @@
       <app-cart-button></app-cart-button>
     </mat-toolbar>
 
-    <div class="main-content">
-
-      <div class="banners-container">
-        <mat-card *ngFor="let banner of banners" class="banner-card">
-          <img [src]="banner.imageUrl" alt="Promotional banner" class="banner-image" />
-          <button mat-raised-button color="primary" class="banner-button" (click)="navigateTo(banner.redirectUrl)">
-            {{ banner.buttonText }}
-          </button>
-        </mat-card>
+    <div class="hero-video-section">
+      <video class="hero-video" autoplay loop muted playsinline #heroVideo> <source src="assets/videos/hero_video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">Blooming Garden</h1>
+        <p class="hero-subtitle">Fresh Flowers for Every Occasion</p>
       </div>
-
-      <mat-card class="card-about-us">
-        <mat-card-title class="title-about-us">
-          Welcome to {{ appConfig.getAppName() }}
-        </mat-card-title>
-        <mat-card-content>
-          <div class="div-text">
-            <div class="text-content">
-              <p>Discover a world of endless possibilities.</p>
-              <p><strong>Unrivaled Selection:</strong> Explore thousands of products.</p>
-              <p><strong>Quality Assurance:</strong> Every product undergoes rigorous checks.</p>
-              <p><strong>Exceptional Value:</strong> Enjoy competitive prices.</p>
-            </div>
-            <img class="img-section" src="https://i.imgur.com/k3tI8to.jpeg" />
-          </div>
-        </mat-card-content>
-      </mat-card>
+    </div>
+    <div class="main-content">
+      <div class="container">
+        <div class="banners-container">
+          <mat-card *ngFor="let banner of banners" class="banner-card">
+            <img [src]="banner.imageUrl" alt="Promotional banner" class="banner-image" />
+            <button mat-raised-button color="primary" class="banner-button" (click)="navigateTo(banner.redirectUrl)">
+              {{ banner.buttonText }}
+            </button>
+          </mat-card>
+        </div>
+      </div>
     </div>
 
+  </div>
+
+  <div class="about-us-video"> <video autoplay loop muted playsinline> <source src="../../assets/videos/about-us.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+    <div class="video-overlay-content"> <h3 class="video-overlay-title">Blooming Garden: Where every bloom tells a story.</h3>
+      <p class="video-overlay-subtitle">Welcome to Blooming Garden, your sanctuary for all things floral. We believe that every petal holds a promise, every bloom a story. Our passion is to bring the freshest, most vibrant flowers directly to you, making every moment — big or small — unforgettable. We're more than just a flower shop; we're cultivators of joy, dedicated to helping you express yourself through the timeless language of flowers.</p>
+
+    </div>
   </div>
 
   <app-list-products [isAdmin]="false"></app-list-products>
 
 </mat-drawer-container>
-
-

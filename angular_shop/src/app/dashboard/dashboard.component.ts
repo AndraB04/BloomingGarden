@@ -6,7 +6,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatIconModule} from "@angular/material/icon";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
-import {Router} from "@angular/router";
+import {Router, RouterOutlet} from "@angular/router";
 import {AddEditCustomerComponent} from "./add-edit-customer/add-edit-customer.component";
 import {ListCustomersComponent} from "./list-customers/list-customers.component";
 import {ListOrdersComponent} from "./list-orders/list-orders.component";
@@ -23,7 +23,8 @@ import {CustomerService} from "../services/customer.service";
     MatIconModule,
     MatSidenavModule,
     MatToolbarModule,
-    TitleCasePipe
+    TitleCasePipe,
+    RouterOutlet
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
