@@ -30,7 +30,7 @@ body, html {
 }
 
 .main-content {
-  padding-top: 30px; /* This might be redundant if drawer-sidenav-content already has margin-top for fixed-header */
+  padding-top: 30px;
   padding-left: 0;
   padding-right: 0;
 }
@@ -49,9 +49,10 @@ body, html {
 
 .hero-video {
   position: absolute;
-  top: 0;
+  top: -5vh;
   left: 0;
   width: 100%;
+  bottom: 100%;
   height: 100%;
   object-fit: contain; /* Or 'cover' depending on desired video scaling */
   z-index: 1;
@@ -73,7 +74,7 @@ body, html {
   top: 30%;
   left: 10%;
   transform: translateY(-50%);
-  z-index: 3; /* Above hero-overlay */
+  z-index: 3;
   color: white;
   text-align: left;
   max-width: 40%;
