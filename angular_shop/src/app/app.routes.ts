@@ -1,3 +1,4 @@
+// src/app/app.routes.ts
 import {Routes} from '@angular/router';
 import {AuthComponent} from "./auth/auth.component";
 import {HomeComponent} from "./home/home.component";
@@ -7,6 +8,7 @@ import {CustomersManagerComponent} from "./dashboard/customers-manager/customers
 import {OrdersManagerComponent} from "./dashboard/orders-manager/orders-manager.component";
 import {ProductsManagerComponent} from "./dashboard/products-manager/products-manager.component";
 import {ProductDetailsComponent} from "./product-details/product-details.component";
+import { ListProductsComponent } from './list-products/list-products.component'; // ASIGURĂ-TE CĂ AI ACEST IMPORT
 
 
 export const routes: Routes = [
@@ -20,6 +22,10 @@ export const routes: Routes = [
     path:'product-details/:id', component: ProductDetailsComponent
   },
   {
+    path: 'products',
+    component: ListProductsComponent
+  },
+  {
     path: "dashboard", children: [
       {path: '', component: DashboardComponent},
       {path: 'customers-manager', component: CustomersManagerComponent},
@@ -28,8 +34,5 @@ export const routes: Routes = [
     ],
     canActivate: [AuthGuard]
   },
-
-  {
-    path: "", redirectTo: "home", pathMatch: "full"
-  }
+  { path: '', redirectTo: '/products', pathMatch: 'full' },
 ];

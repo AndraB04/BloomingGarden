@@ -16,6 +16,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {OrderService} from "../services/order.service";
 import {CartButtonComponent} from "../home/cart-button/cart-button.component";
+import {ListProductsComponent} from "../list-products/list-products.component";
 
 @Component({
   selector: 'app-product-details',
@@ -32,7 +33,8 @@ import {CartButtonComponent} from "../home/cart-button/cart-button.component";
     MatInputModule,
     ReactiveFormsModule,
     MatDatepickerModule,
-    CartButtonComponent
+    CartButtonComponent,
+    ListProductsComponent
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './product-details.component.html',
