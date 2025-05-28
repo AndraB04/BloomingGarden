@@ -16,7 +16,7 @@
       (closeSidebar)="closeSidebar()"
       (goToDashboard)="goToDashboard()"
       (logOut)="logOut()"
-    ></app-sidebar>
+      (navigateTo)="onNavigateToRequested($event)" ></app-sidebar>
   </mat-drawer>
 
 
@@ -70,7 +70,7 @@
           <h4>ONLINE STORE</h4>
           <ul>
             <li>
-              <span class="footer-nav-link" (click)="navigateTo('/order-online')" role="link" tabindex="0" (keydown.enter)="navigateTo('/order-online')" (keydown.space)="navigateTo('/order-online')">Order online</span>
+              <span class="footer-nav-link" (click)="navigateTo('/products')" role="link" tabindex="0" (keydown.enter)="navigateTo('/order-online')" (keydown.space)="navigateTo('/order-online')">Order online</span>
             </li>
             <li>
               <span class="footer-nav-link" (click)="navigateTo('/auth')" role="link" tabindex="0" (keydown.enter)="navigateTo('/auth')" (keydown.space)="navigateTo('/auth')">My Account</span>

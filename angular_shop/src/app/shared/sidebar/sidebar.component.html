@@ -20,10 +20,12 @@
       <a class="menu-item main-title" (click)="handleNavigation('home')">{{ appOwner || 'Blooming Garden' }}</a>
       <a class="menu-item" *ngIf="isAdmin && loggedInUser" (click)="handleDashboardClick()">DASHBOARD</a>
 
-      <!-- Butonul de Login/Logout existent -->
+      <a class="menu-item" (click)="handleNavigation('products')">PRODUCTS</a>
+
       <a class="menu-item" (click)="handleLogOutClick()">
         {{ loggedInUser == null ? 'LOGIN' : 'LOGOUT' }}
       </a>
+
     </nav>
   </div>
 </mat-drawer>
