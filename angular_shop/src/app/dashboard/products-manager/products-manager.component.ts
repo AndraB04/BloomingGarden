@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {AddEditCustomerComponent} from "../add-edit-customer/add-edit-customer.component";
 import {AddEditProductComponent} from "../add-edit-product/add-edit-product.component";
 import {ListCustomersComponent} from "../list-customers/list-customers.component";
@@ -10,7 +10,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {ConfigurationsService} from "../../services/configurations.service";
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
+import {ProductService} from '../../services/product.service';
 
 @Component({
   selector: 'app-rooms-manager',
@@ -30,15 +31,31 @@ import {Router} from "@angular/router";
   templateUrl: './products-manager.component.html',
   styleUrl: './products-manager.component.css'
 })
-export class ProductsManagerComponent {
+export class ProductsManagerComponent implements OnInit {
   productData: any;
 
-  constructor(public appConfig: ConfigurationsService,  private router: Router) {
+  constructor(
+    public appConfig: ConfigurationsService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private productService: ProductService
+  ) {}
 
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      const productId = params['id'];
+      if (productId) {
+        this.productService.getProductById(productId).subscribe((response: any) => {
+          if (response && response.data) {
+            this.productData = response.data;
+          }
+        });
+      }
+    });
   }
 
-  onChangeRoom(room: any) {
-    this.productData = room;
+  onChangeRoom(product: any) {
+    this.productData = product;
   }
 
   onHome() {

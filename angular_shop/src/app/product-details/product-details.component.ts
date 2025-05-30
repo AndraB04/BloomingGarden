@@ -34,7 +34,6 @@ import {ListProductsComponent} from "../list-products/list-products.component";
     ReactiveFormsModule,
     MatDatepickerModule,
     CartButtonComponent,
-    ListProductsComponent
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './product-details.component.html',
@@ -58,7 +57,7 @@ export class ProductDetailsComponent implements OnInit {
 
       if (id != null) {
         this.productService.getProductById(id).subscribe((response: any) => {
-          console.log('ProductDetailsComponent - getProductById response:', response); // <--- ADD THIS LOG
+          console.log('ProductDeztailsComponent - getProductById response:', response); // <--- ADD THIS LOG
           if (response && response.data) { // Ensure response and data exist
             this.productData = response.data;
             console.log('ProductDetailsComponent - productData set to:', this.productData); // <--- ADD THIS LOG

@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {ConfigurationsService} from "./configurations.service";
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,9 @@ export class ProductService {
     this.readProducts();
   }
 
+  private getApiUrl(): string {
+    return this.appConfig.getApiUrl();
+  }
   getProductList() {
     return this.productObservable.asObservable();
   }
@@ -39,11 +43,8 @@ export class ProductService {
     })
   }
 
-  deleteProduct(product: any) {
-  this.httpClient.delete(`${this.appConfig.getApiUrl()}/products/deleteProduct/${product.id}`).subscribe((response: any)=> {
-    console.log(response);
-    this.readProducts();
-  })
+  deleteProduct(productId: string): Observable<any> {
+    return this.httpClient.delete<any>(`${this.getApiUrl()}/products/deleteProduct/${productId}`);
   }
 
   readProducts() {

@@ -22,6 +22,11 @@ export const routes: Routes = [
     path:'product-details/:id', component: ProductDetailsComponent
   },
   {
+    path: 'product-edit/:id',
+    component: ProductsManagerComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'products',
     component: ListProductsComponent
   },

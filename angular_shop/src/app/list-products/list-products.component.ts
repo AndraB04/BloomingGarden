@@ -1,11 +1,13 @@
-import {Component, OnInit} from '@angular/core'; // Adaugam OnInit
-import {ProductService} from "../services/product.service";
-import {MatCardModule} from "@angular/material/card";
-import {NgForOf, NgIf, TitleCasePipe, CurrencyPipe} from "@angular/common";
-import {MatButtonModule} from "@angular/material/button";
-import {OrderService} from "../services/order.service"; // Probabil nu mai e necesar aici, dar il lasam
-import {CustomerService} from "../services/customer.service";
-import {Router} from "@angular/router";
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { ProductService } from "../services/product.service";
+import { MatCardModule } from "@angular/material/card";
+import { NgForOf, NgIf, TitleCasePipe, CurrencyPipe } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { OrderService } from "../services/order.service";
+import { CustomerService } from "../services/customer.service";
+import { Router } from "@angular/router";
+import { Subscription } from 'rxjs';
+import { User } from '../services/auth.service';
 
 @Component({
   selector: 'app-list-products',
@@ -16,60 +18,109 @@ import {Router} from "@angular/router";
     MatButtonModule,
     NgIf,
     TitleCasePipe,
-    CurrencyPipe
+
   ],
   templateUrl: './list-products.component.html',
   styleUrl: './list-products.component.css'
 })
-export class ListProductsComponent implements OnInit { // Implementam OnInit
-  isAdmin: boolean = false; // Nu mai este @Input, va fi gestionat intern
+export class ListProductsComponent implements OnInit, OnDestroy {
+  @Output() changeData = new EventEmitter<any>();
+
+  isAdmin: boolean = false;
+  loggedInUser: User | null = null;
+
   products: Array<any> = [];
+
+  private isAdminSubscription: Subscription | undefined;
+  private loggedUserSubscription: Subscription | undefined;
+  private productsSubscription: Subscription | undefined;
+
 
   constructor(
     private productService: ProductService,
-    private orderService: OrderService, // Pastram pentru compatibilitate, dar ar putea fi eliminat daca nu e folosit
+    private orderService: OrderService,
     private customerService: CustomerService,
     private router: Router
   ) {
-    // Aici putem initializa produsele, dar isAdmin ar trebui setat in ngOnInit
+
+    console.log("[ListProductsComponent Ctor] Component created.");
   }
 
   ngOnInit(): void {
-    // Verificam rolul utilizatorului la initializarea componentei
-    const loggedUser = this.customerService.getLoggedUser();
-    if (loggedUser && loggedUser.role === 'admin') { // Presupunem ca utilizatorul are o proprietate 'role'
-      this.isAdmin = true;
-    } else {
-      this.isAdmin = false;
-    }
+    console.log("[ListProductsComponent OnInit] Initializing component...");
 
-    this.productService.getProductList().subscribe((productList: Array<any>) => {
-      this.products = productList;
-    });
+    // Abonare la starea de admin
+    this.isAdminSubscription = this.customerService.getIsAdminObservable().subscribe(
+      (isAdminStatus: boolean) => {
+        this.isAdmin = isAdminStatus;
+        console.log("[ListProductsComponent] isAdmin status updated via Observable:", this.isAdmin);
+      }
+    );
+
+    // Abonare la starea utilizatorului logat
+    this.loggedUserSubscription = this.customerService.loggedUser$.subscribe(
+      (user: User | null) => {
+        this.loggedInUser = user;
+        console.log("[ListProductsComponent] loggedInUser updated via Observable:", this.loggedInUser ? this.loggedInUser.email : 'null');
+      }
+    );
+
+    this.loadProducts();
+  }
+
+  ngOnDestroy(): void {
+    console.log("[ListProductsComponent OnDestroy] Destroying component. Unsubscribing...");
+    if (this.isAdminSubscription) {
+      this.isAdminSubscription.unsubscribe();
+    }
+    if (this.loggedUserSubscription) {
+      this.loggedUserSubscription.unsubscribe();
+    }
+    if (this.productsSubscription) {
+      this.productsSubscription.unsubscribe();
+    }
+  }
+
+  loadProducts(): void {
+    if (this.productsSubscription) {
+      this.productsSubscription.unsubscribe();
+    }
+    this.productsSubscription = this.productService.getProductList().subscribe(
+      (productList: Array<any>) => {
+        this.products = productList;
+        console.log("[ListProductsComponent] Products loaded:", this.products.length);
+      },
+      (error: any) => {
+        console.error("[ListProductsComponent] Error loading products:", error);
+      }
+    );
   }
 
   onEdit(item: any) {
-    // Navigam catre o pagina de editare, de exemplu /product-edit/ID_PRODUS
-    // Asigura-te ca ai o ruta configurata pentru 'product-edit/:id'
+    // Presupunând că onEdit va naviga direct, nu va emite la o componentă părinte imediat
     this.router.navigate(['/', 'product-edit', item.id]);
+    // this.changeData.emit(item); // Dacă vrei să emită și să navigheze, e ok, dar onEdit e de obicei pentru navigare
   }
 
   onDelete(item: any) {
-    console.log("Attempting to delete product:", item);
-    // Aici ar trebui sa adaugi o confirmare inainte de stergere, nu un alert!
-    // Exemplu simplu pentru moment:
-    if (confirm("Esti sigur ca vrei sa stergi acest produs?")) { // Foloseste un modal custom in loc de confirm() in aplicatii reale
-      this.productService.deleteProduct(item);
-      // Optional: reincarca lista de produse sau actualizeaza-o local
-      this.productService.getProductList().subscribe((productList: Array<any>) => {
-        this.products = productList;
+    console.log("[ListProductsComponent] Attempting to delete product:", item);
+    if (confirm("Ești sigur că vrei să ștergi acest produs?")) {
+      // Asigură-te că deleteProduct returnează un Observable
+      this.productService.deleteProduct(item.id).subscribe({ // Trimitem doar ID-ul, nu tot obiectul
+        next: (response: any) => {
+          console.log("[ListProductsComponent] Product deleted successfully!", response);
+          this.loadProducts(); // Reîncarcă produsele după ștergere
+        },
+        error: (error: any) => {
+          console.error("[ListProductsComponent] Error deleting product:", error);
+          alert("Eroare la ștergerea produsului.");
+        }
       });
     }
   }
 
   onBuy(item: any) {
-    if (this.customerService.getLoggedUser() == null) {
-      // Afiseaza un mesaj intr-un modal custom, nu alert()
+    if (this.loggedInUser == null) { // Folosește direct this.loggedInUser
       alert("Utilizatorul nu este logat, trebuie sa te loghezi inainte sa adaugi produse in cos");
       this.router.navigate(["/", "auth"]);
     } else {
