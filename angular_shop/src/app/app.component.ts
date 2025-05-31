@@ -17,6 +17,7 @@ import { AuthService, User } from './services/auth.service';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { ToolbarComponent } from './shared/toolbar/toolbar.component';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -106,6 +107,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.closeSidebar();
   }
 
+  goToProducts(): void{
+    this.router.navigate(['/products']);
+  }
+
   onNavigateToHomeRequested(): void { // <<--- NOUA METODĂ
     console.log('AppComponent: Navigating to home page requested from toolbar.');
     this.router.navigate(['/home']);
@@ -131,5 +136,11 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       console.error('Newsletter form submitted without a valid email.');
     }
+  }
+
+  onNavigateToRequested(route: string): void {
+    console.log('Navigating to:', route); // Pentru debug
+    this.router.navigate([`/${route}`]);
+    this.closeSidebar(); // Închide sidebar-ul după navigare
   }
 }

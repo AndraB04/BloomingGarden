@@ -1,10 +1,9 @@
 <mat-drawer-container class="drawer-container" autosize>
 
-    <div style="display: flex">
-      <app-add-edit-product [product]="productData"></app-add-edit-product>
+  <div style="display: flex">
+    <app-add-edit-product [product]="productData"></app-add-edit-product>
 
-      <app-list-products (changeData)="onChangeRoom($event)" [isAdmin]="true"></app-list-products>
-    </div>
+    <app-list-products></app-list-products>
+  </div>
 
 </mat-drawer-container>
-

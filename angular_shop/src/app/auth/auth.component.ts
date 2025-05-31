@@ -59,7 +59,7 @@ export class AuthComponent {
           console.log('Login with success!');
 
           console.log(response);
-          
+
           this.resetLoginForm();
 
           this.router.navigate(['/', 'home']);
@@ -98,13 +98,6 @@ export class AuthComponent {
     }
   }
 
-  // Metoda onForgotPassword pe care am adăugat-o anterior
-  onForgotPassword(): void {
-    console.log('Forgot password link clicked!');
-    alert('Funcționalitatea de resetare parolă va fi implementată aici!');
-    // Aici ai putea naviga către o altă pagină sau deschide un dialog
-    // this.router.navigate(['/forgot-password']);
-  }
 
 
   getErrorMessage(formControl: any) {

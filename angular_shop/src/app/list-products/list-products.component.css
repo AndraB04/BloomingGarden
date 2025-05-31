@@ -5,10 +5,6 @@
   border-top-right-radius: 10px;
 
 }
-.main-content {
-  padding-top: 30px;
-}
-
 .image{
   width: 100%;
   height: 200px;
@@ -19,6 +15,7 @@
 .page-view{
   display: flex;
   flex-wrap: wrap;
+  margin-top: 30px;
 }
 .div-controls{
   display: flex;
@@ -42,3 +39,28 @@
 .p-price{
   font-weight: bold;
 }
+
+.btn-action {
+  background-color: #28a745;
+  color: white; /* Text alb */
+}
+
+.btn-action.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-buy {
+  background-color: #6F725A;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-buy:hover {
+  background-color: #2C2E24;
+}
+
