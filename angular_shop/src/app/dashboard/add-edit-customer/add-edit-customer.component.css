@@ -7,6 +7,7 @@
 .card-container{
   width:400px;
   margin: 16px;
+  background-color: #FAF0E6;
 }
 .div-buttons-container{
   display: flex;

@@ -1,6 +1,7 @@
 .card-customer{
   width: 30vw;
   margin: 16px;
+  background-color: #FAF0E6;
 }
 .page-view{
   display: flex;
