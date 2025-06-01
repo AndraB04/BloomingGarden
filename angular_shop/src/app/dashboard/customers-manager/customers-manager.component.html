@@ -1,10 +1,6 @@
 <mat-drawer-container class="drawer-container" autosize>
-
-    <div style="display: flex">
-      <app-add-edit-customer [customer]="customerData"></app-add-edit-customer>
-
-      <app-list-customers (changeCustomerData)="onChangeCustomer($event)"></app-list-customers>
+  <div class="content-wrapper-flex">
+    <app-add-edit-customer [customer]="customerData"></app-add-edit-customer>
+    <app-list-customers (changeCustomerData)="onChangeCustomer($event)"></app-list-customers>
   </div>
-
 </mat-drawer-container>
-

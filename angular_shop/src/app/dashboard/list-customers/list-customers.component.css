@@ -1,26 +1,43 @@
-.card-customer{
+.card-customer {
   width: 30vw;
   margin: 16px;
   background-color: #FAF0E6;
 }
-.page-view{
+
+.page-view {
   display: flex;
   flex-wrap: wrap;
 }
-.div-controls{
+
+.div-controls {
   display: flex;
 }
-.div-admin-controls{
+
+.div-admin-controls {
   display: grid;
+  margin-top: 16px;
 }
-.p-name{
+
+.div-admin-controls button {
+  width: 100%;
+}
+
+.p-name {
   font-size: 20px;
-  color:black;
+  color: black;
   font-weight: bold;
   margin-top: 16px;
 }
-.p-text{
+
+.p-text {
   font-size: 14px;
   font-style: italic;
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 6px;
 }
 
+.btn-action {
+  background-color: #444536;
+  color: white;
+}

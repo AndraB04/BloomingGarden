@@ -10,28 +10,31 @@
   padding-bottom: 50px;
   background:
     linear-gradient(
-      rgba(255, 247, 237, 0.7),
+      rgba(255, 247, 237, 0.7), /* Overlay bej semi-transparent pentru întreaga pagină */
       rgba(255, 247, 237, 0.7)
     ),
     url('/assets/img_1.png') no-repeat center center;
   background-size: cover;
-  font-family: var(--font-main, 'Montserrat', sans-serif);
+  font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
 }
 
-
 .drawer-container {
   width: 90%;
-  max-width: 800px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 3rem 2.5rem;
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
+  padding: 2rem 2.5rem;
+  /* MODIFICARE AICI: Fundal semi-transparent pentru a lăsa imaginea de pe :host să se vadă */
+  background-color: rgba(255, 247, 237, 0.85); /* Bej semi-transparent. (255,247,237) este #FFF7ED */
+  /* Poți ajusta valoarea alpha (0.85) după preferințe. */
+  /* De exemplu, 0.7 pentru a se potrivi exact cu overlay-ul de pe :host, */
+  /* sau 0.9 pentru a fi mai opac, dar totuși transparent. */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* O bordură mai subtilă poate arăta mai bine acum */
   border-radius: 16px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   box-sizing: border-box;
 }
 
@@ -70,4 +73,23 @@
 
 .img-logo:hover {
   transform: scale(1.03);
+}
+
+.content-wrapper-flex {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+.content-wrapper-flex > *:first-child {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 400px;
+}
+
+.content-wrapper-flex > *:last-child {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  min-width: 0;
 }
