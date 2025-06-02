@@ -11,17 +11,43 @@
       <p class="p-text">Order id: {{ reservation.id }}</p>
       <p class="p-text">Order Details: {{ reservation.details }}</p>
 
-      <div *ngIf="reservation.productList && reservation.productList.length > 0">
+      <div *ngIf="reservation.productList && reservation.productList.length > 0" class="products-section">
         <h3 class="p-name">Products:</h3>
-        <div style="display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0;">
-          <div style="display: flex; align-items: start; width: 100%" *ngFor="let item of reservation.productList">
-            <img [src]="item.image" class="img-preview" [alt]="item.name"/>
-            <div style="margin-left: 16px; flex-grow: 1">
-              <p class="lbl-title-details">{{ item.name }}</p>
-              <p class="lbl-description-details">{{ item.description }}</p>
-              <p class="lbl-price">{{ item.price }} RON</p>
+        <div class="product-carousel">
+          <button mat-icon-button class="nav-button prev" (click)="prevProduct(reservation)" 
+                  *ngIf="reservation.productList.length > 1">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          
+          <div class="product-display">
+            <img [src]="reservation.productList[currentProductIndex].image" 
+                 class="product-image" 
+                 [alt]="reservation.productList[currentProductIndex].name"/>
+            
+            <div class="product-info">
+              <h2 class="product-title">{{ reservation.productList[currentProductIndex].name }}</h2>
+              <p class="product-description">{{ reservation.productList[currentProductIndex].description }}</p>
+              <p class="product-price">{{ reservation.productList[currentProductIndex].price }} RON</p>
+              
+              <div class="product-navigation" *ngIf="reservation.productList.length > 1">
+                <div class="dots">
+                  <span class="dot" 
+                        *ngFor="let item of reservation.productList; let i = index"
+                        [class.active]="i === currentProductIndex"
+                        (click)="setProductIndex(reservation, i)">
+                  </span>
+                </div>
+                <p class="product-counter">
+                  {{ currentProductIndex + 1 }} / {{ reservation.productList.length }}
+                </p>
+              </div>
             </div>
           </div>
+
+          <button mat-icon-button class="nav-button next" (click)="nextProduct(reservation)"
+                  *ngIf="reservation.productList.length > 1">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
         </div>
       </div>
       <div *ngIf="!reservation.productList || reservation.productList.length === 0"

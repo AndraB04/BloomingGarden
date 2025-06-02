@@ -19,6 +19,7 @@ import {MatIconModule} from "@angular/material/icon";
 })
 export class ListOrdersComponent {
   orders: Array<any> = [];
+  currentProductIndex: number = 0;
 
   constructor(private orderService: OrderService) {
     this.loadOrders();
@@ -29,6 +30,26 @@ export class ListOrdersComponent {
       console.log('Received orders:', orderList);
       this.orders = orderList;
     });
+  }
+
+  nextProduct(reservation: any) {
+    if (reservation.productList && reservation.productList.length > 0) {
+      this.currentProductIndex = (this.currentProductIndex + 1) % reservation.productList.length;
+    }
+  }
+
+  prevProduct(reservation: any) {
+    if (reservation.productList && reservation.productList.length > 0) {
+      this.currentProductIndex = this.currentProductIndex === 0 
+        ? reservation.productList.length - 1 
+        : this.currentProductIndex - 1;
+    }
+  }
+
+  setProductIndex(reservation: any, index: number) {
+    if (reservation.productList && index >= 0 && index < reservation.productList.length) {
+      this.currentProductIndex = index;
+    }
   }
 
   onDelete(order:any){
