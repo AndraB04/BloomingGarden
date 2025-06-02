@@ -76,17 +76,11 @@ export class OrderService {
   }
 
   public confirmOrder(id: string) {
-    this.httpClient.post(`${this.appConfig.getApiUrl()}/orders/confirmOrderById/${id}`, {}).subscribe((response: any) => {
-      console.log(response);
-      this.readOrders();
-    })
+    return this.httpClient.post(`${this.appConfig.getApiUrl()}/orders/confirmOrderById/${id}`, {});
   }
 
   public canceledOrder(id: string) {
-    this.httpClient.post(`${this.appConfig.getApiUrl()}/orders/cancelOrderById/${id}`, {}).subscribe((response: any) => {
-      console.log(response);
-      this.readOrders();
-    })
+    return this.httpClient.post(`${this.appConfig.getApiUrl()}/orders/cancelOrderById/${id}`, {});
   }
 
   public readOrders() {

@@ -21,21 +21,57 @@ export class ListOrdersComponent {
   orders: Array<any> = [];
 
   constructor(private orderService: OrderService) {
+    this.loadOrders();
+  }
+
+  private loadOrders() {
     this.orderService.getOrders().subscribe((orderList:Array<any>) => {
+      console.log('Received orders:', orderList);
       this.orders = orderList;
-    })
+    });
   }
 
   onDelete(order:any){
-    this.orderService.deleteOrder(order.id);
+    if (confirm('Are you sure you want to delete this order?')) {
+      this.orderService.deleteOrder(order.id);
+      this.orderService.readOrders();
+    }
   }
 
   onConfirm(order: any) {
-    this.orderService.confirmOrder(order.id)
+    if (order.paymentStatus !== 'PENDING') {
+      console.warn('Cannot confirm order that is not in PENDING state');
+      return;
+    }
+
+    this.orderService.confirmOrder(order.id).subscribe({
+      next: (response) => {
+        console.log('Order confirmed successfully:', response);
+        this.orderService.readOrders();
+      },
+      error: (error) => {
+        console.error('Error confirming order:', error);
+        alert('Failed to confirm order. Please try again.');
+      }
+    });
   }
 
   onCanceled(order: any) {
-    this.orderService.canceledOrder(order.id)
+    if (order.paymentStatus !== 'PENDING') {
+      console.warn('Cannot cancel order that is not in PENDING state');
+      return;
+    }
+
+    this.orderService.canceledOrder(order.id).subscribe({
+      next: (response) => {
+        console.log('Order canceled successfully:', response);
+        this.orderService.readOrders();
+      },
+      error: (error) => {
+        console.error('Error canceling order:', error);
+        alert('Failed to cancel order. Please try again.');
+      }
+    });
   }
 
 }

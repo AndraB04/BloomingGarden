@@ -1,4 +1,26 @@
 <mat-drawer-container class="drawer-container" autosize>
+  <mat-drawer-content class="drawer-sidenav-content">
+    <mat-toolbar>
+      <div style="display: flex; width: 100%">
+        <button mat-button (click)="onHome()">
+          <mat-icon>home</mat-icon>
+          Home
+        </button>
+        <button mat-button (click)="onDashboard()">
+          <mat-icon>dashboard</mat-icon>
+          Dashboard
+        </button>
+        <div style="flex: 1 1 auto"></div>
+        <button mat-button (click)="onLogOut()">
+          <mat-icon>logout</mat-icon>
+          Log out
+        </button>
+      </div>
+    </mat-toolbar>
 
+    <div style="margin: 16px">
+      <app-list-reservations></app-list-reservations>
+    </div>
+  </mat-drawer-content>
 </mat-drawer-container>
 
