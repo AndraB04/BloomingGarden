@@ -8,7 +8,8 @@ import {CustomersManagerComponent} from "./dashboard/customers-manager/customers
 import {OrdersManagerComponent} from "./dashboard/orders-manager/orders-manager.component";
 import {ProductsManagerComponent} from "./dashboard/products-manager/products-manager.component";
 import {ProductDetailsComponent} from "./product-details/product-details.component";
-import { ListProductsComponent } from './list-products/list-products.component'; // ASIGURĂ-TE CĂ AI ACEST IMPORT
+import { ListProductsComponent } from './list-products/list-products.component';
+import { NewsletterManagerComponent } from './dashboard/newsletter-manager/newsletter-manager.component';
 
 
 export const routes: Routes = [
@@ -36,6 +37,7 @@ export const routes: Routes = [
       {path: 'customers-manager', component: CustomersManagerComponent},
       {path: 'orders-manager', component: OrdersManagerComponent},
       {path: 'products-manager', component: ProductsManagerComponent},
+      {path: 'newsletter-manager', component: NewsletterManagerComponent},
     ],
     canActivate: [AuthGuard]
   },

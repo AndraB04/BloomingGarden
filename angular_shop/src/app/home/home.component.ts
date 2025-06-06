@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 import { ListProductsComponent } from "../list-products/list-products.component";
 import { CartButtonComponent } from "./cart-button/cart-button.component";
 import { CustomerService } from "../services/customer.service";
+import { NewsletterSubscriptionComponent } from '../shared/newsletter-subscription/newsletter-subscription.component';
 import { NgFor, NgIf } from "@angular/common";
 import { ConfigurationsService } from "../services/configurations.service";
 
@@ -23,7 +24,7 @@ import { ConfigurationsService } from "../services/configurations.service";
     MatIconModule,
     MatCardModule,
     CartButtonComponent,
-    ListProductsComponent,
+    NewsletterSubscriptionComponent,
     NgIf,
     NgFor
   ],

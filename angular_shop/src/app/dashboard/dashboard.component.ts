@@ -48,6 +48,9 @@ export class DashboardComponent {
       case 'orders':
         this.router.navigate(['/', 'dashboard', 'orders-manager']);
         break;
+      case 'newsletter':
+        this.router.navigate(['/', 'dashboard', 'newsletter-manager']);
+        break;
     }
   }
 

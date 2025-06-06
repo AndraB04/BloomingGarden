@@ -13,4 +13,4 @@ export const appConfig: ApplicationConfig = {
       anchorScrolling: 'enabled',
     })
     ), provideAnimations(),provideHttpClient()]
-};
+}
