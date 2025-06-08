@@ -99,9 +99,12 @@ export class NewsletterService {
 
   getSubscribers(): Observable<string[]> {
     console.log('Fetching newsletter subscribers');
-    return this.http.get<{ data: string[] }>(`${this.apiUrl}/subscribers`).pipe(
-      map((response: { data: string[] }) => response.data),
-      tap((subscribers: string[]) => console.log(`Found ${subscribers.length} subscribers`)),
+    return this.http.get<any>(`${this.apiUrl}/subscribers`).pipe(
+      map(response => {
+        console.log('Raw response:', response);
+        return response.data || [];
+      }),
+      tap(subscribers => console.log(`Found ${subscribers.length} subscribers`)),
       catchError(error => this.handleError(error, 'getSubscribers'))
     );
   }

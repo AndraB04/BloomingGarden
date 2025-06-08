@@ -133,8 +133,8 @@ export class NewsletterManagerComponent implements OnInit {
 
   loadSubscribers() {
     this.newsletterService.getSubscribers().subscribe({
-      next: (response: any) => {
-        this.subscribers = response.data || [];
+      next: (subscribers: string[]) => {
+        this.subscribers = subscribers;
       },
       error: (error) => {
         this.snackBar.open('Failed to load subscribers', 'Close', {
