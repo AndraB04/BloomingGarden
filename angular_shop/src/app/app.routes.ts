@@ -12,6 +12,7 @@ import { ListProductsComponent } from './list-products/list-products.component';
 import { NewsletterManagerComponent } from './dashboard/newsletter-manager/newsletter-manager.component';
 
 
+
 export const routes: Routes = [
   {
     path: "auth", component: AuthComponent,
@@ -26,6 +27,11 @@ export const routes: Routes = [
     path: 'product-edit/:id',
     component: ProductsManagerComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'newsletter-manager',
+    component: NewsletterManagerComponent,
+    canActivate: [AuthGuard] 
   },
   {
     path: 'products',

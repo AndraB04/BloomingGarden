@@ -94,17 +94,35 @@ export class NewsletterSubscriptionComponent {
   onSubmit() {
     if (this.subscriptionForm.valid) {
       const { email, name } = this.subscriptionForm.value;
+
+      // Disable form while submitting
+      this.subscriptionForm.disable();
+
       this.newsletterService.subscribe(email, name).subscribe({
-        next: () => {
+        next: (response) => {
           this.snackBar.open('Successfully subscribed to newsletter!', 'Close', {
-            duration: 3000
+            duration: 3000,
+            panelClass: ['success-snackbar']
           });
           this.subscriptionForm.reset();
+          this.subscriptionForm.enable();
         },
         error: (error) => {
-          this.snackBar.open('Failed to subscribe. Please try again.', 'Close', {
-            duration: 3000
+          console.error('Newsletter subscription error:', error);
+          const message = error?.message || 'Failed to subscribe. Please try again.';
+          this.snackBar.open(message, 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
           });
+          this.subscriptionForm.enable();
+        }
+      });
+    } else {
+      // If form is invalid, show error messages for all fields
+      Object.keys(this.subscriptionForm.controls).forEach(key => {
+        const control = this.subscriptionForm.get(key);
+        if (control?.invalid) {
+          control.markAsTouched();
         }
       });
     }

@@ -11,12 +11,14 @@ export interface User {
   username: string;
   email: string;
   userRole: 'ADMIN' | 'USER' | 'CUSTOMER';
+  token?: string;
 }
 
 export interface AuthResponse {
   token: string | null;
   user: User;
   message?: string;
+
 }
 
 export interface RegistrationData {
@@ -70,93 +72,104 @@ export class AuthService {
     return localStorage.getItem('authToken');
   }
 
+  // Replace the existing logIn method in src/app/services/auth.service.ts
+
   logIn(credentials: { email: string, password: string }): Observable<AuthResponse> {
     const loginUrl = `${this.getApiUrl()}/auth/login`;
     console.log(`AuthService: Attempting login to ${loginUrl} for email: ${credentials.email}`);
 
     return this.http.post<any>(loginUrl, credentials).pipe(
-      tap(rawResponse => {
-        console.log('[AuthService TAP] Raw server response:', JSON.stringify(rawResponse, null, 2));
-      }),
       map((serverResponse: any) => {
         console.log('[AuthService MAP] Processing server response:', JSON.stringify(serverResponse, null, 2));
 
-        const statusInBody = serverResponse.status;
-        const messageFromServer = serverResponse.message;
-        const userDataFromServer = serverResponse.data;
+        // Handle both possible response structures
+        let userData, realToken;
 
-        if (
-          statusInBody === 200 &&
-          userDataFromServer &&
-          typeof userDataFromServer === 'object' &&
-          userDataFromServer.id !== undefined &&
-          typeof userDataFromServer.name === 'string' && userDataFromServer.name.trim() !== '' &&
-          typeof userDataFromServer.email === 'string' && userDataFromServer.email.trim() !== '' &&
-          typeof userDataFromServer.userRole === 'string' &&
-          (userDataFromServer.userRole === 'ADMIN' || userDataFromServer.userRole === 'USER' || userDataFromServer.userRole === 'CUSTOMER')
-        ) {
-          console.log('[AuthService MAP] Server response validation PASSED. Role:', userDataFromServer.userRole);
-
-          const mappedUser: User = {
-            id: String(userDataFromServer.id),
-            username: userDataFromServer.name,
-            email: userDataFromServer.email,
-            userRole: userDataFromServer.userRole as 'ADMIN' | 'USER' | 'CUSTOMER'
-          };
-
-          const placeholderToken = "PLACEHOLDER_TOKEN_" + Date.now();
-
-          const finalAuthResponse: AuthResponse = {
-            token: placeholderToken,
-            user: mappedUser,
-            message: messageFromServer
-          };
-
-          console.log('[AuthService MAP] Successfully created AuthResponse:', JSON.stringify(finalAuthResponse, null, 2));
-          this.storeAuthData(finalAuthResponse.token, finalAuthResponse.user);
-          return finalAuthResponse;
+        if (serverResponse.data) {
+          // Structure: { data: { user: {...}, token: "..." } }
+          userData = serverResponse.data.user;
+          realToken = serverResponse.data.token;
         } else {
-          let validationErrorReason = "Unknown validation failure.";
-          if (statusInBody !== 200) validationErrorReason = `Expected status 200 in body, got ${statusInBody}.`;
-          else if (!userDataFromServer || typeof userDataFromServer !== 'object') validationErrorReason = "'data' field is missing or not an object.";
-          else if (userDataFromServer.id === undefined) validationErrorReason = "'data.id' is missing.";
-          else if (!userDataFromServer.name || typeof userDataFromServer.name !== 'string') validationErrorReason = "'data.name' is missing or not a string.";
-          else if (!userDataFromServer.email || typeof userDataFromServer.email !== 'string') validationErrorReason = "'data.email' is missing or not a string.";
-          else if (!userDataFromServer.userRole || typeof userDataFromServer.userRole !== 'string') validationErrorReason = "'data.userRole' is missing or not a string.";
-          else if (!(userDataFromServer.userRole === 'ADMIN' || userDataFromServer.userRole === 'USER' || userDataFromServer.userRole === 'CUSTOMER')) {
-            validationErrorReason = `Unrecognized userRole: '${userDataFromServer.userRole}'. Expected ADMIN, USER, or CUSTOMER.`;
-          }
+          // Structure: { user: {...}, token: "..." }
+          userData = serverResponse.user;
+          realToken = serverResponse.token;
+        }
 
-          const errorMessage = `Invalid login response structure or data: ${validationErrorReason}`;
-          console.error('[AuthService MAP] Validation FAILED:', errorMessage, 'Full server response:', JSON.stringify(serverResponse, null, 2));
-          throw new Error(errorMessage);
+        // Validate response data
+        if (!userData || !realToken) {
+          throw new Error('Invalid server response structure');
+        }
+
+        console.log('[AuthService MAP] Real JWT Token found:', realToken);
+
+        // Create the User object
+        const mappedUser: User = {
+          id: String(userData.id || userData.userId),
+          username: userData.name || userData.username,
+          email: userData.email,
+          userRole: userData.userRole || userData.role || 'USER',
+          token: realToken
+        };
+
+        // Create the final response
+        const finalAuthResponse: AuthResponse = {
+          token: realToken,
+          user: mappedUser,
+          message: serverResponse.message || 'Login successful'
+        };
+
+        // Store auth data and notify services
+        this.storeAuthData(finalAuthResponse.token, finalAuthResponse.user);
+        return finalAuthResponse;
+      }),
+      catchError(this.handleError)
+    );
+  }
+  register(data: RegistrationData): Observable<any> {
+    const registerUrl = `${this.getApiUrl()}/auth/register`;
+    return this.http.post<any>(registerUrl, data).pipe(
+      tap(response => {
+        console.log('[AuthService Register] Response:', response);
+        // After successful registration, subscribe to newsletter
+        if (response && response.user && response.user.email) {
+          this.subscribeToNewsletter(response.user.email, response.user.name || '');
         }
       }),
       catchError(this.handleError)
     );
   }
 
-  register(data: RegistrationData): Observable<any> {
-    const registerUrl = `${this.getApiUrl()}/auth/register`;
-    return this.http.post<any>(registerUrl, data).pipe(
-      tap(response => console.log('[AuthService Register] Response:', response)),
-      catchError(this.handleError)
-    );
+  private subscribeToNewsletter(email: string, name: string): void {
+    const newsletterUrl = `${this.getApiUrl()}/newsletter/subscribe`;
+    this.http.post(newsletterUrl, {
+      email,
+      name,
+      isCustomer: true
+    }).subscribe({
+      next: () => console.log('Successfully subscribed new customer to newsletter'),
+      error: err => console.error('Failed to subscribe customer to newsletter:', err)
+    });
   }
 
   private storeAuthData(token: string | null, user: User): void {
     if (token) {
+      // Your user object now contains the token, so this is the most important line
+      localStorage.setItem('currentUser', JSON.stringify(user));
+
+      // It's also good practice to store the token separately
       localStorage.setItem('authToken', token);
+
     } else {
+      localStorage.removeItem('currentUser');
       localStorage.removeItem('authToken');
     }
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    this.currentTokenSubject.next(token);
-    this.currentUserSubject.next(user);
-    this.customerService.setLoggedUser(user);
-    console.log('[AuthService] Stored auth data. User:', user.email, 'Role:', user.userRole);
-  }
 
+    // Update the BehaviorSubjects
+    this.currentUserSubject.next(user);
+    this.currentTokenSubject.next(token);
+    this.customerService.setLoggedUser(user);
+    console.log('[AuthService] Stored REAL auth data. User:', user.email, 'Role:', user.userRole);
+  }
   logOut(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');

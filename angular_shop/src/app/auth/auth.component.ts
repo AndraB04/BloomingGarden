@@ -38,8 +38,8 @@ export class AuthComponent {
   registerForm: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
-    reTypePassword: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    reTypePassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
 
   viewType: string = 'login';
@@ -104,8 +104,13 @@ export class AuthComponent {
     if (formControl.hasError('required')) {
       return 'You must enter a value';
     }
-
-    return formControl.hasError('email') ? 'Not a valid email' : '';
+    if (formControl.hasError('email')) {
+      return 'Not a valid email';
+    }
+    if (formControl.hasError('minlength')) {
+      return `Must be at least ${formControl.errors['minlength'].requiredLength} characters`;
+    }
+    return '';
   }
 
   private resetLoginForm() {

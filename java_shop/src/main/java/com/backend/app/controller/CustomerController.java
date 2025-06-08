@@ -1,25 +1,24 @@
 package com.backend.app.controller;
 
-
 import com.backend.app.exception.ResourceNotFoundException;
 import com.backend.app.model.Customer;
-
 import com.backend.app.service.CustomerService;
 import com.backend.app.utils.ApiResponse;
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCustomers() {
@@ -75,5 +74,22 @@ public class CustomerController {
         return ResponseEntity.ok(ApiResponse.success("Customer with id: " + id + " deleted successfully", null));
     }
 
+    @PostMapping("/sync-subscriptions")
+    public ResponseEntity<ApiResponse> syncSubscriptions() {
+        List<Customer> customers = customerService.getAllCustomers();
+        int synced = 0;
 
+        for (Customer customer : customers) {
+            if (customer.isSubscribed()) {
+                try {
+                    customerService.saveCustomer(customer);
+                    synced++;
+                } catch (Exception e) {
+                    System.err.println("Failed to sync customer " + customer.getEmail() + ": " + e.getMessage());
+                }
+            }
+        }
+
+        return ResponseEntity.ok(ApiResponse.success("Synced " + synced + " newsletter subscriptions", null));
+    }
 }

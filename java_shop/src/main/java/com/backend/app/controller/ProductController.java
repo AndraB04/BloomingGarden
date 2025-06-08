@@ -1,22 +1,23 @@
 package com.backend.app.controller;
 
-
 import com.backend.app.exception.ResourceNotFoundException;
 import com.backend.app.model.Product;
 import com.backend.app.service.ProductService;
 import com.backend.app.utils.ApiResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllProducts() {
