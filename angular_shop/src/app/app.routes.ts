@@ -10,6 +10,8 @@ import {ProductsManagerComponent} from "./dashboard/products-manager/products-ma
 import {ProductDetailsComponent} from "./product-details/product-details.component";
 import { ListProductsComponent } from './list-products/list-products.component';
 import { NewsletterManagerComponent } from './dashboard/newsletter-manager/newsletter-manager.component';
+import { EmailSettingsComponent } from './preferences/email-settings/email-settings.component';
+import { UnsubscribeComponent } from './shared/unsubscribe/unsubscribe.component';
 
 
 
@@ -32,6 +34,20 @@ export const routes: Routes = [
     path: 'newsletter-manager',
     component: NewsletterManagerComponent,
     canActivate: [AuthGuard] 
+  },
+  {
+    path: 'preferences/email-settings',
+    component: EmailSettingsComponent
+  },
+  {
+    path: 'unsubscribe',
+    component: UnsubscribeComponent,
+    data: { title: 'Unsubscribe from Newsletter' }
+  },
+  {
+    path: 'subscribe',
+    redirectTo: '/preferences/email-settings',
+    pathMatch: 'full'
   },
   {
     path: 'products',

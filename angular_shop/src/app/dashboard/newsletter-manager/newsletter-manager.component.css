@@ -1,0 +1,52 @@
+.newsletter-manager {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.newsletter-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.subscribers-list {
+  height: fit-content;
+}
+
+.subscriber {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.subscriber:last-child {
+  border-bottom: none;
+}
+
+.subscriber mat-icon {
+  color: #6c757d;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.no-subscribers {
+  padding: 16px;
+  text-align: center;
+  color: #6c757d;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+}
+
+textarea {
+  min-height: 150px;
+}

@@ -2,18 +2,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { FormsModule } from '@angular/forms'; // Needed for ngModel, ngForm, ngSubmit
+import { FormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon'; // Import MatIconRegistry
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { DomSanitizer } from '@angular/platform-browser'; // Import DomSanitizer
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { ConfigurationsService } from './services/configurations.service';
 import { AuthService, User } from './services/auth.service';
+import { NewsletterService } from './services/newsletter.service';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { ToolbarComponent } from './shared/toolbar/toolbar.component';
 
@@ -54,8 +56,10 @@ export class AppComponent implements OnInit, OnDestroy {
     public appConfig: ConfigurationsService,
     private authService: AuthService,
     private router: Router,
-    private matIconRegistry: MatIconRegistry, // Inject MatIconRegistry
-    private domSanitizer: DomSanitizer     // Inject DomSanitizer
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    private newsletterService: NewsletterService,
+    private snackBar: MatSnackBar
   ) {
     this.appName = this.appConfig.getAppName();
     this.appLogo = this.appConfig.getAppLogo();
@@ -131,10 +135,28 @@ export class AppComponent implements OnInit, OnDestroy {
   onSubscribeNewsletter(formValue?: { email: string }): void {
     if (formValue && formValue.email) {
       console.log('Newsletter subscription email:', formValue.email);
-      // Implement actual subscription logic here (e.g., API call)
-      alert(`Thank you for subscribing, ${formValue.email}! (Placeholder)`);
+      this.newsletterService.subscribe(formValue.email).subscribe({
+        next: () => {
+          this.snackBar.open('Successfully subscribed to newsletter!', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        },
+        error: (error) => {
+          console.error('Newsletter subscription error:', error);
+          const message = error?.message || 'Failed to subscribe. Please try again.';
+          this.snackBar.open(message, 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
     } else {
       console.error('Newsletter form submitted without a valid email.');
+      this.snackBar.open('Please enter a valid email address', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
     }
   }
 

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -85,12 +86,25 @@ public class EmailServiceImpl implements EmailService {
                 message.setBcc(batch); // Use BCC for privacy
                 message.setSubject(subject);
                 
-                // Add unsubscribe footer with proper URL
-                String unsubscribeUrl = emailConfig.getBaseUrl() + "/unsubscribe";
-                String fullContent = content + "\n\n---\n" +
-                    "To unsubscribe from our newsletter, click here: " +
-                    unsubscribeUrl + "?email=${recipient}";
-                
+                // Add unsubscribe footer with proper URL and styling
+                String divider = "\n\n" + "─".repeat(50) + "\n\n";
+                String unsubscribeUrl = emailConfig.getBaseUrl() + "/preferences/email-settings";
+                String footerContent = String.format(
+                    "%s" +
+                    "You received this email because you are subscribed to our newsletter.\n" +
+                    "To manage your email preferences or unsubscribe, visit:\n" +
+                    "%s\n\n" +
+                    "© %d %s. All rights reserved.\n" +
+                    "%s, %s",
+                    divider,
+                    unsubscribeUrl,
+                    java.time.Year.now().getValue(),
+                    senderName,
+                    senderName,
+                    senderEmail
+                );
+
+                String fullContent = content + footerContent;
                 message.setText(fullContent);
                 mailSender.send(message);
                 
@@ -101,6 +115,16 @@ public class EmailServiceImpl implements EmailService {
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to send newsletter: " + e.getMessage(), e);
+        }
+    }
+
+    private String hashEmail(String email) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(email.getBytes("UTF-8"));
+            return java.util.Base64.getUrlEncoder().encodeToString(hash);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to hash email: " + e.getMessage(), e);
         }
     };
 
@@ -132,8 +156,12 @@ public class EmailServiceImpl implements EmailService {
         }
 
         try {
+            Newsletter subscription;
             // Check for existing subscription
-            newsletterRepository.findByEmail(email).ifPresent(subscription -> {
+            Optional <Newsletter> existingSubscription = newsletterRepository.findByEmail(email);
+            
+            if (existingSubscription.isPresent()) {
+                subscription = existingSubscription.get();
                 if (subscription.isActive()) {
                     throw new IllegalStateException("Email is already subscribed to the newsletter");
                 }
@@ -141,26 +169,40 @@ public class EmailServiceImpl implements EmailService {
                 subscription.setActive(true);
                 subscription.setName(name);
                 subscription.setCustomer(isCustomer);
-                newsletterRepository.save(subscription);
-            });
-
-            // Create new subscription if not found
-            Newsletter subscription = new Newsletter();
-            subscription.setEmail(email);
-            subscription.setName(name);
-            subscription.setCustomer(isCustomer);
+            } else {
+                // Create new subscription if not found
+                subscription = new Newsletter();
+                subscription.setEmail(email);
+                subscription.setName(name);
+                subscription.setCustomer(isCustomer);
+                subscription.setActive(true);
+            }
             newsletterRepository.save(subscription);
             
             // Send welcome email
+            String divider = "\n\n" + "─".repeat(50) + "\n\n";
+            String unsubscribeUrl = emailConfig.getBaseUrl() + "/preferences/email-settings";
             String welcomeContent = String.format(
                 "Dear %s,\n\n" +
-                "Thank you for subscribing to our newsletter! You'll receive updates about our latest products and offers.\n\n" +
-                "To unsubscribe at any time, click here: %s/unsubscribe?email=%s\n\n" +
-                "Best regards,\n%s",
+                "Welcome to the Blooming Garden newsletter! 🌸\n\n" +
+                "Thank you for subscribing to our newsletter. We're excited to share with you:\n" +
+                "• Exclusive offers and promotions\n" +
+                "• New seasonal collections\n" +
+                "• Gardening tips and flower care guides\n" +
+                "• Special event announcements\n\n" +
+                "Stay tuned for our next update!%s" +
+                "Manage Your Email Preferences\n" +
+                "You can customize your email settings or unsubscribe at any time:\n" +
+                "%s\n\n" +
+                "© %d %s. All rights reserved.\n" +
+                "%s, %s",
                 name.isEmpty() ? "Valued Customer" : name,
-                emailConfig.getBaseUrl(),
-                email,
-                senderName
+                divider,
+                unsubscribeUrl,
+                java.time.Year.now().getValue(),
+                senderName,
+                senderName,
+                senderEmail
             );
             
             sendEmail(email, "Welcome to Our Newsletter!", welcomeContent);
@@ -176,24 +218,34 @@ public class EmailServiceImpl implements EmailService {
         }
 
         try {
+            System.out.println("Attempting to unsubscribe email: " + email);
             Newsletter subscription = newsletterRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Email is not subscribed to the newsletter"));
-                
+            
+            System.out.println("Found subscription: " + subscription.getEmail() + ", active=" + subscription.isActive());    
             subscription.setActive(false);
-            newsletterRepository.save(subscription);
+            subscription = newsletterRepository.save(subscription);
+            System.out.println("Updated subscription: " + subscription.getEmail() + ", active=" + subscription.isActive());
             
             // Send confirmation email
+            String divider = "\n\n" + "─".repeat(50) + "\n\n";
+            String resubscribeUrl = emailConfig.getBaseUrl() + "/subscribe";
             String confirmationContent = String.format(
                 "Dear %s,\n\n" +
                 "You have been successfully unsubscribed from our newsletter.\n\n" +
                 "If this was a mistake, you can resubscribe at any time by visiting:\n" +
-                "%s/subscribe\n\n" +
-                "Best regards,\n%s",
+                "%s%s" +
+                "© %d %s. All rights reserved.\n" +
+                "%s, %s",
                 subscription.getName() != null && !subscription.getName().isEmpty() 
                     ? subscription.getName() 
                     : "Valued Customer",
-                emailConfig.getBaseUrl(),
-                senderName
+                resubscribeUrl,
+                divider,
+                java.time.Year.now().getValue(),
+                senderName,
+                senderName,
+                senderEmail
             );
             
             sendEmail(email, "Newsletter Unsubscription Confirmed", confirmationContent);

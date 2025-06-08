@@ -47,8 +47,11 @@ public class NewsletterController {
 
     @PostMapping("/unsubscribe")
     public ResponseEntity<ApiResponse> unsubscribe(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        System.out.println("Received unsubscribe request for email: " + email);
         try {
-            emailService.unsubscribeFromNewsletter(request.get("email"));
+            emailService.unsubscribeFromNewsletter(email);
+            System.out.println("Successfully unsubscribed email: " + email);
             return ResponseEntity.ok(ApiResponse.success("Successfully unsubscribed from newsletter", null));
         } catch (IllegalArgumentException e) {
             // FIX: Add the status code

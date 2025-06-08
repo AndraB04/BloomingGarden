@@ -74,11 +74,16 @@ export class NewsletterService {
 
   unsubscribe(email: string): Observable<any> {
     console.log('Attempting newsletter unsubscription for:', email);
-    return this.http.post(`${this.apiUrl}/unsubscribe`, { 
+    const url = `${this.apiUrl}/unsubscribe`;
+    console.log('Unsubscribe URL:', url);
+    return this.http.post(url, { 
       email 
     }).pipe(
       tap(response => console.log('Newsletter unsubscription successful:', response)),
-      catchError(error => this.handleError(error, 'unsubscribe'))
+      catchError(error => {
+        console.error('Newsletter unsubscription failed:', error);
+        return this.handleError(error, 'unsubscribe');
+      })
     );
   }
 
