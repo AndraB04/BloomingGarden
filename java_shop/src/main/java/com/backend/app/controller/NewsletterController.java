@@ -49,29 +49,33 @@ public class NewsletterController {
     public ResponseEntity<ApiResponse> unsubscribe(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         System.out.println("Received unsubscribe request for email: " + email);
+        
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), "Email is required"));
+        }
+
         try {
-            emailService.unsubscribeFromNewsletter(email);
+            emailService.unsubscribeFromNewsletter(email.trim());
             System.out.println("Successfully unsubscribed email: " + email);
             return ResponseEntity.ok(ApiResponse.success("Successfully unsubscribed from newsletter", null));
         } catch (IllegalArgumentException e) {
-            // FIX: Add the status code
+            System.err.println("Invalid unsubscribe request: " + e.getMessage());
             return ResponseEntity.badRequest()
                     .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), "Invalid request: " + e.getMessage()));
         } catch (Exception e) {
-            // FIX: Add the status code
+            System.err.println("Failed to unsubscribe email: " + email + ", error: " + e.getMessage());
             return ResponseEntity.internalServerError()
                     .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed to unsubscribe from newsletter"));
         }
     }
 
-    // --- ADD SECURITY TO THIS METHOD ---
     @PostMapping("/send")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> sendNewsletter(@RequestBody Map<String, String> request) {
         try {
             List<String> subscribers = emailService.getAllSubscribers();
             if (subscribers.isEmpty()) {
-                // FIX: Add the status code
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error(HttpStatus.BAD_REQUEST.value(), "No active subscribers to send newsletter to"));
             }
@@ -83,13 +87,11 @@ public class NewsletterController {
             );
             return ResponseEntity.ok(ApiResponse.success("Newsletter sent successfully", null));
         } catch (Exception e) {
-            // FIX: Add the status code
             return ResponseEntity.internalServerError()
                     .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed to send newsletter"));
         }
     }
 
-    // --- ADD SECURITY TO THIS METHOD ---
     @GetMapping("/subscribers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> getSubscribers() {
