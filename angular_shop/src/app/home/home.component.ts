@@ -40,10 +40,18 @@ export class HomeComponent {
     },
     {
       imageUrl: 'https://images.squarespace-cdn.com/content/v1/5a6a90197131a5be62ea265b/1579750697481-O6T7MS06PUPRAF5MMGFH/florist+near+me+new+orleans+mitchs+flowers+stephanie+tarrant+monique+chauvin+baby+shower+flowers.jpg',
-      redirectUrl: '/auth',
-      buttonText: 'Create an account'
+      redirectUrl: this.getAuthUrl(),
+      buttonText: this.getAuthButtonText()
     }
   ];
+
+  private getAuthUrl(): string {
+    return this.customerService.getLoggedUser() ? '/account' : '/auth';
+  }
+
+  private getAuthButtonText(): string {
+    return this.customerService.getLoggedUser() ? 'My Account' : 'Create an Account';
+  }
 
   constructor(
     public appConfig: ConfigurationsService,
