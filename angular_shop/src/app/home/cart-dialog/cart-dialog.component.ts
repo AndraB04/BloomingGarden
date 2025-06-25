@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
-import {NgForOf, NgIf} from "@angular/common";
+import {CommonModule, NgForOf, NgIf, CurrencyPipe, DatePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
@@ -30,31 +30,37 @@ import {MatInput} from "@angular/material/input";
     MatInput,
     MatLabel,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './cart-dialog.component.html',
   styleUrl: './cart-dialog.component.css'
 })
 export class CartDialogComponent {
   products: Array<any> = [];
-  modernCartItems: Array<any> = [];
+  modernCartItems: Array<CartItem> = [];
+
   details: FormControl = new FormControl<any>('', Validators.required);
 
-  constructor(private orderService: OrderService, private cartService: CartService, private router: Router) {
-    // Load products from old cart system
+  constructor(
+    private orderService: OrderService,
+    private cartService: CartService,
+    private router: Router
+  ) {
+
     this.orderService.getCart().subscribe((productsList: Array<any>) => {
       this.products = productsList;
     });
-    
-    // Load items from modern cart system
-    this.cartService.cartItems.subscribe((cartItems) => {
+
+    this.cartService.cartItems.subscribe((cartItems: CartItem[]) => {
       this.modernCartItems = cartItems;
     });
   }
 
   public onBuy() {
-    // Transfer products from old cart to modern cart service
+
     this.products.forEach(product => {
+
       const cartItem: CartItem = {
         id: product.id,
         name: product.name || product.title,
@@ -65,26 +71,28 @@ export class CartDialogComponent {
       this.cartService.addToCart(cartItem);
     });
 
-    // Clear old cart
     this.products.forEach(product => {
       this.orderService.removeFromCart(product);
     });
 
-    // Navigate to checkout
     this.router.navigate(['/checkout']);
+
   }
 
   public onDeleteFromCart(product: any) {
     this.orderService.removeFromCart(product);
   }
 
-  public onDeleteFromModernCart(item: any) {
+  public onDeleteFromModernCart(item: CartItem) {
     this.cartService.remove(item);
   }
 
   getErrorMessage(input: FormControl): string {
     if (input.hasError('required')) {
       return 'You must enter a value';
+    }
+    if (input.hasError('email')) {
+      return 'Not a valid email';
     }
     return '';
   }

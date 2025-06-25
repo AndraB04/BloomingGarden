@@ -1,12 +1,15 @@
+<!-- src/app/checkout/checkout.component.html -->
+
 <div class="checkout-page">
   <h2>Finalizare Comandă</h2>
 
   <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
 
-    <div class="cart-summary">
+    <div class="cart-summary form-section">
       <h3>Sumar Coș</h3>
       <p>Total Cantitate: {{ totalQuantity }}</p>
       <p>Total Preț: {{ totalPrice | currency:'RON':'symbol':'1.2-2' }}</p>
+      <!-- Poți adăuga aici lista produselor din coș -->
     </div>
 
     <div formGroupName="customer" class="form-section">
@@ -31,6 +34,9 @@
         <div *ngIf="hasError('customer', 'email')" class="error-message">
           Email-ul este obligatoriu și valid.
         </div>
+        <div *ngIf="checkoutFormGroup.get('customer.email')?.hasError('email') && (checkoutFormGroup.get('customer.email')?.dirty || checkoutFormGroup.get('customer.email')?.touched)" class="error-message">
+          Introduceți o adresă de email validă.
+        </div>
       </div>
     </div>
 
@@ -52,6 +58,7 @@
       </div>
       <div>
         <label for="shippingState">Județ:</label>
+        <!-- Păstrat ca input text. Poate fi select bazat pe țară mai târziu. -->
         <input id="shippingState" type="text" formControlName="state">
         <div *ngIf="hasError('shippingAddress', 'state')" class="error-message">
           Județul este obligatoriu.
@@ -66,7 +73,12 @@
       </div>
       <div>
         <label for="shippingCountry">Țara:</label>
-        <input id="shippingCountry" type="text" formControlName="country" readonly>
+        <select id="shippingCountry" formControlName="country" (change)="getStates('shippingAddress')">
+          <option value="" disabled>-- Selectează țara --</option>
+          <option *ngFor="let country of countries" [value]="country">
+            {{ country }}
+          </option>
+        </select>
         <div *ngIf="hasError('shippingAddress', 'country')" class="error-message">
           Țara este obligatorie.
         </div>
@@ -96,6 +108,7 @@
       </div>
       <div>
         <label for="billingState">Județ:</label>
+        <!-- Păstrat ca input text. Poate fi select bazat pe țară mai târziu. -->
         <input id="billingState" type="text" formControlName="state">
         <div *ngIf="hasError('billingAddress', 'state')" class="error-message">
           Județul este obligatoriu.
@@ -110,7 +123,12 @@
       </div>
       <div>
         <label for="billingCountry">Țara:</label>
-        <input id="billingCountry" type="text" formControlName="country" readonly>
+        <select id="billingCountry" formControlName="country" (change)="getStates('billingAddress')">
+          <option value="" disabled>-- Selectează țara --</option>
+          <option *ngFor="let country of countries" [value]="country">
+            {{ country }}
+          </option>
+        </select>
         <div *ngIf="hasError('billingAddress', 'country')" class="error-message">
           Țara este obligatorie.
         </div>
@@ -125,10 +143,64 @@
           [id]="method.id"
           [value]="method.id"
           formControlName="paymentMethod"
-          (change)="onPaymentMethodChange()">
+        >
         <label [for]="method.id">{{ method.name }}</label>
       </div>
+
+      <div *ngIf="paymentMethodControl?.value === 'card'" formGroupName="creditCard" class="card-details-section">
+        <h4>Detalii Card</h4>
+
+        <div>
+          <label for="cardNumber">Număr Card:</label>
+          <input id="cardNumber" type="text" formControlName="cardNumber">
+          <div *ngIf="hasError('payment.creditCard', 'cardNumber')" class="error-message">
+            Numărul cardului este obligatoriu (16 cifre).
+          </div>
+        </div>
+
+        <div class="expiry-cvc-group">
+          <div class="expiry-date">
+            <label>Data Expirării:</label>
+            <div class="expiry-inputs">
+              <select formControlName="expirationMonth">
+                <option value="" disabled>MM</option>
+                <option *ngFor="let month of creditCardMonths" [value]="month">{{ month | number:'2.0' }}</option> <!-- Format 01, 02 etc -->
+              </select>
+              <span>/</span>
+              <select formControlName="expirationYear" (change)="handleYearChange()"> <!-- Adăugat (change) pentru a ajusta lunile -->
+                <option value="" disabled>YYYY</option>
+                <option *ngFor="let year of creditCardYears" [value]="year">{{ year }}</option>
+              </select>
+            </div>
+            <div *ngIf="hasError('payment.creditCard', 'expirationMonth') || hasError('payment.creditCard', 'expirationYear')" class="error-message">
+              Data expirării este obligatorie.
+            </div>
+          </div>
+
+          <div class="cvc">
+            <label for="cvc">CVC:</label>
+            <input id="cvc" type="text" formControlName="cvc">
+            <div *ngIf="hasError('payment.creditCard', 'cvc')" class="error-message">
+              CVC-ul este obligatoriu (3-4 cifre).
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="cardholderName">Nume Titular Card:</label>
+          <input id="cardholderName" type="text" formControlName="cardholderName">
+          <div *ngIf="hasError('payment.creditCard', 'cardholderName')" class="error-message">
+            Numele titularului este obligatoriu.
+          </div>
+        </div>
+
+      </div>
     </div>
+
+    <div *ngIf="checkoutFormGroup.invalid && checkoutFormGroup.touched" class="error-message general-error">
+      Vă rugăm corectați erorile din formular înainte de a plasa comanda.
+    </div>
+
 
     <button type="submit" [disabled]="checkoutFormGroup.invalid">Plasează Comanda ({{ totalPrice | currency:'RON':'symbol':'1.2-2' }})</button>
 

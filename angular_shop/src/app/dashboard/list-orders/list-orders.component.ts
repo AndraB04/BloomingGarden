@@ -1,51 +1,58 @@
-import { Component, OnInit } from '@angular/core'; // Adaugat OnInit
+// src/app/dashboard/orders-manager/list-orders/list-orders.component.ts
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { OrderService } from "../../services/order.service";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
-// import { NgForOf } from "@angular/common"; // <-- Acesta nu mai este necesar odata ce importi CommonModule
-import { CommonModule } from '@angular/common'; // <-- Adaugă acest import
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from "@angular/material/icon";
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-list-reservations',
   standalone: true,
   imports: [
-    CommonModule, // <-- Adaugă CommonModule aici
+    CommonModule,
     MatButtonModule,
     MatCardModule,
-    // NgForOf, // <-- Poți șterge NgForOf de aici, CommonModule îl include
     MatIconModule
-    // Adauga aici alte module/componente standalone pe care le foloseste template-ul tau (daca este cazul)
   ],
   templateUrl: './list-orders.component.html',
   styleUrl: './list-orders.component.css'
 })
-// Componenta implementeaza OnInit
-export class ListOrdersComponent implements OnInit { // <-- Adauga 'implements OnInit'
 
-  orders: Array<any> = [];
-  currentProductIndex: number = 0; // Aparent, acest index este folosit global pentru *toate* comenzile? S-ar putea sa vrei sa-l gestionezi per comanda.
+export class ListOrdersComponent implements OnInit, OnDestroy {
+
+  orders: any[] = [];
+  private ordersSubscription: Subscription | undefined;
+  private imagesBaseUrl = 'http://localhost:8081/images/';
 
   constructor(private orderService: OrderService) {
-    // Mutam apelul loadOrders in ngOnInit
-    // this.loadOrders();
   }
 
   ngOnInit(): void {
-    // Apelam logica de incarcare a datelor la initializarea componentei
-    this.loadOrders();
-  }
-
-
-  private loadOrders() {
-    this.orderService.getOrders().subscribe((orderList: Array<any>) => {
-      console.log('Received orders:', orderList);
-      // Probabil vrei sa initializezi currentProductIndex per comanda aici, nu global
-      this.orders = orderList.map(order => ({ ...order, currentProductIndex: 0 })); // Exemplu: Adaugam index per comanda
+    this.ordersSubscription = this.orderService.getOrders().subscribe((orderList: any[]) => {
+      this.orders = orderList.map(order => {
+        if (order.productList) {
+          order.productList.forEach((product: any) => {
+            product.imageUrl = this.imagesBaseUrl + product.image;
+          });
+        }
+        return { ...order, currentProductIndex: 0 };
+      });
+      console.log('Processed orders for display:', this.orders);
     });
+
+    this.orderService.readOrders();
   }
 
-  // Metodele next/prev/set ar trebui sa primeasca comanda ca parametru pentru a gestiona indexul per comanda
+  ngOnDestroy(): void {
+    if (this.ordersSubscription) {
+      this.ordersSubscription.unsubscribe();
+    }
+  }
+
   nextProduct(order: any) {
     if (order.productList && order.productList.length > 0) {
       order.currentProductIndex = (order.currentProductIndex + 1) % order.productList.length;
@@ -66,18 +73,23 @@ export class ListOrdersComponent implements OnInit { // <-- Adauga 'implements O
     }
   }
 
-
   onDelete(order: any) {
     if (confirm('Are you sure you want to delete this order?')) {
-      // Presupunem ca deleteOrder si readOrders sunt metode in orderService
-      this.orderService.deleteOrder(order.id);
-      this.orderService.readOrders(); // Sau reimprospatezi lista local
+      this.orderService.deleteOrder(order.id).subscribe({
+        next: (response) => {
+          console.log('Order deleted successfully:', order.id, response);
+          this.orders = this.orders.filter(o => o.id !== order.id);
+        },
+        error: (error) => {
+          console.error('Error deleting order:', error);
+          alert('Failed to delete order. Please try again.');
+        }
+      });
     }
   }
 
   onConfirm(order: any) {
-    // Verifica statusul comenzii (folosind paymentStatus)
-    if (order.status !== 'PENDING') { // Verifica campul 'status', nu 'paymentStatus' conform Order.java
+    if (order.paymentStatus !== 'PENDING') {
       console.warn('Cannot confirm order that is not in PENDING state');
       return;
     }
@@ -85,7 +97,10 @@ export class ListOrdersComponent implements OnInit { // <-- Adauga 'implements O
     this.orderService.confirmOrder(order.id).subscribe({
       next: (response) => {
         console.log('Order confirmed successfully:', response);
-        this.orderService.readOrders(); // Reimprospateaza lista
+        const index = this.orders.findIndex(o => o.id === order.id);
+        if (index !== -1) {
+          this.orders[index].paymentStatus = 'CONFIRMED';
+        }
       },
       error: (error) => {
         console.error('Error confirming order:', error);
@@ -95,8 +110,7 @@ export class ListOrdersComponent implements OnInit { // <-- Adauga 'implements O
   }
 
   onCanceled(order: any) {
-    // Verifica statusul comenzii (folosind paymentStatus)
-    if (order.status !== 'PENDING') { // Verifica campul 'status', nu 'paymentStatus' conform Order.java
+    if (order.paymentStatus !== 'PENDING') {
       console.warn('Cannot cancel order that is not in PENDING state');
       return;
     }
@@ -104,7 +118,10 @@ export class ListOrdersComponent implements OnInit { // <-- Adauga 'implements O
     this.orderService.canceledOrder(order.id).subscribe({
       next: (response) => {
         console.log('Order canceled successfully:', response);
-        this.orderService.readOrders(); // Reimprospateaza lista
+        const index = this.orders.findIndex(o => o.id === order.id);
+        if (index !== -1) {
+          this.orders[index].paymentStatus = 'CANCELED';
+        }
       },
       error: (error) => {
         console.error('Error canceling order:', error);
@@ -113,4 +130,13 @@ export class ListOrdersComponent implements OnInit { // <-- Adauga 'implements O
     });
   }
 
+  getCurrentProduct(order: any): any | undefined {
+    if (order && order.productList && order.productList.length > 0) {
+      const index = order.currentProductIndex;
+      if (index >= 0 && index < order.productList.length) {
+        return order.productList[index];
+      }
+    }
+    return undefined;
+  }
 }

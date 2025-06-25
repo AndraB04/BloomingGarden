@@ -1,40 +1,52 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {CustomerService} from "./customer.service";
-import {ConfigurationsService} from "./configurations.service";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from "rxjs";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { CustomerService } from "./customer.service";
+import { ConfigurationsService } from "./configurations.service";
+import { Order } from '../models/order';
+import { CheckoutRequest, OrderResponse } from '../models/checkout';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private cartObservable = new BehaviorSubject<Array<any>>([]);
-  private ordersObservable = new BehaviorSubject(<Array<any>>([]));
 
-  constructor(private appConfig: ConfigurationsService, private customerService: CustomerService, private httpClient: HttpClient) {
+  private cartObservable = new BehaviorSubject<Array<any>>([]);
+  private ordersObservable = new BehaviorSubject<Array<any>>([]);
+
+  private totalQuantitySubject = new BehaviorSubject<number>(0);
+  private totalPriceSubject = new BehaviorSubject<number>(0);
+
+  totalQuantity: Observable<number> = this.totalQuantitySubject.asObservable();
+  totalPrice: Observable<number> = this.totalPriceSubject.asObservable();
+
+  private baseUrl = 'http://localhost:8081/api'; // Adapteaza URL-ul
+
+  constructor(
+    private appConfig: ConfigurationsService,
+    private customerService: CustomerService,
+    private httpClient: HttpClient
+  ) {
     this.readOrders();
   }
 
   public addToCart(product: any): void {
-    console.log('OrderService - addToCart: Product received:', product); // <--- ADD THIS LOG
     let products = this.cartObservable.getValue();
     products.push(product);
     this.cartObservable.next(products);
-    console.log('OrderService - addToCart: Current cart contents:', products); // <--- ADD THIS LOG
   }
 
   public removeFromCart(product: any): void {
     let products = this.cartObservable.getValue();
-
-    products = products.filter((it: any) => it.id != product.id);
+    products = products.filter((it: any) => it.id !== product.id);
     this.cartObservable.next(products);
   }
 
-  public getCart() {
-    return this.cartObservable.asObservable()
+  public getCart(): Observable<any[]> {
+    return this.cartObservable.asObservable();
   }
 
-  public getOrders() {
+  public getOrders(): Observable<any[]> {
     return this.ordersObservable.asObservable();
   }
 
@@ -45,10 +57,8 @@ export class OrderService {
     let productIds = [];
     for (let product of cartProducts) {
       total += product.price;
-
-      productIds.push({id: product.id});
+      productIds.push({ id: product.id });
     }
-
 
     let body = {
       date: this.parseDate(),
@@ -68,18 +78,15 @@ export class OrderService {
     })
   }
 
-  public deleteOrder(id: string) {
-    this.httpClient.delete(`${this.appConfig.getApiUrl()}/orders/deleteOrderById/${id}`).subscribe((response: any) => {
-      console.log(response);
-      this.readOrders()
-    })
+  public deleteOrder(id: string): Observable<any> {
+    return this.httpClient.delete(`${this.appConfig.getApiUrl()}/orders/deleteOrderById/${id}`);
   }
 
-  public confirmOrder(id: string) {
+  public confirmOrder(id: string): Observable<any> {
     return this.httpClient.post(`${this.appConfig.getApiUrl()}/orders/confirmOrderById/${id}`, {});
   }
 
-  public canceledOrder(id: string) {
+  public canceledOrder(id: string): Observable<any> {
     return this.httpClient.post(`${this.appConfig.getApiUrl()}/orders/cancelOrderById/${id}`, {});
   }
 
@@ -89,27 +96,44 @@ export class OrderService {
     });
   }
 
-  private parseDate() {
+  public getOrderByTrackingNumber(trackingNumber: string): Observable<Order> {
+    return this.httpClient.get<Order>(`${this.baseUrl}/orders/${trackingNumber}`);
+  }
+
+  public clearCart(): void {
+    this.cartObservable.next([]);
+  }
+
+  computeCartTotals() {
+    let totalQuantity: number = 0;
+    let totalPrice: number = 0;
+
+    for (let item of this.cartObservable.getValue()) {
+      totalQuantity += (item.quantity || 0);
+      totalPrice += (item.quantity || 0) * (item.unitPrice || 0);
+    }
+
+    this.totalQuantitySubject.next(totalQuantity);
+    this.totalPriceSubject.next(totalPrice);
+  }
+
+  private parseDate(): string {
     let date = new Date();
     let day = date.getDate();
-    let month = date.getMonth() + 1; //lunile anului incep de la 0. Ianuarie=0
+    let month = date.getMonth() + 1;
     let year = date.getFullYear();
     let dateStr = "";
 
     dateStr += year;
     dateStr += "-";
-    if (month < 10) {
-      dateStr += "0" + month;
-    } else {
-      dateStr += month;
-    }
+    dateStr += (month < 10 ? "0" : "") + month;
     dateStr += "-";
-    if (day < 10) {
-      dateStr += "0" + day;
-    } else {
-      dateStr += day;
-    }
-    console.log(dateStr);
+    dateStr += (day < 10 ? "0" : "") + day;
+
     return dateStr;
+  }
+
+  public placeOrder(purchasePayload: CheckoutRequest): Observable<OrderResponse> {
+    return this.httpClient.post<OrderResponse>(`${this.baseUrl}/checkout/purchase`, purchasePayload);
   }
 }

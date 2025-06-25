@@ -1,25 +1,31 @@
 /* src/app/checkout/checkout.component.css */
 
 .checkout-page {
-  padding: 20px;
   max-width: 800px;
   margin: 20px auto;
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-page h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
 }
 
 .form-section {
-  margin-bottom: 30px;
-  padding: 20px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
   background-color: #fff;
 }
 
-.form-section h3 {
+.form-section h3, .form-section h4 {
   margin-top: 0;
-  color: #333;
+  color: #555;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
   margin-bottom: 20px;
@@ -29,61 +35,132 @@
   margin-bottom: 15px;
 }
 
-.form-section label {
+label {
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.card-details-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed #ccc;
+}
+
+.expiry-cvc-group {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.expiry-date {
+  flex: 2;
+}
+
+.expiry-inputs {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.expiry-inputs select {
+  width: auto;
+  flex-grow: 1;
+}
+
+.expiry-inputs span {
+  font-size: 1.2rem;
   font-weight: bold;
   color: #555;
 }
 
-.form-section input[type="text"],
-.form-section input[type="email"] {
-  width: calc(100% - 22px);
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+.cvc {
+  flex: 1;
+}
+
+
+.expiry-date input, .expiry-date select, .cvc input {
+  width: auto;
+}
+.expiry-date > div, .cvc > div {
+  margin-bottom: 0;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+input[type="checkbox"] + label {
+  display: inline-block;
+  font-weight: normal;
+  margin-bottom: 15px;
+  vertical-align: middle;
+}
+
+input[type="radio"] {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+input[type="radio"] + label {
+  display: inline-block;
+  margin-right: 15px;
+  font-weight: normal;
+  vertical-align: middle;
 }
 
 .error-message {
-  color: red;
-  font-size: 0.8rem;
+  color: #dc3545;
+  font-size: 0.9rem;
   margin-top: 5px;
+
+  margin-bottom: 10px;
+
+  &.general-error {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched {
+  border-color: #dc3545;
 }
 
 button[type="submit"] {
   display: block;
   width: 100%;
-  padding: 15px;
-  background-color: #28a745; /* Verde */
+  padding: 12px 20px;
+  background-color: #28a745;
   color: white;
   border: none;
-  border-radius: 4px;
-  font-size: 1.2rem;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 1.2rem;
+  margin-top: 30px;
   transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover:not(:disabled) {
-  background-color: #218838; /* Verde mai închis */
+button[type="submit"]:hover {
+  background-color: #218838;
 }
 
 button[type="submit"]:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
-}
-
-.cart-summary {
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 1px dashed #ccc;
-  border-radius: 4px;
-  background-color: #e9e9e9;
-}
-
-.cart-summary h3 {
-  margin-top: 0;
-  border-bottom: none;
-  padding-bottom: 0;
-  margin-bottom: 10px;
 }
