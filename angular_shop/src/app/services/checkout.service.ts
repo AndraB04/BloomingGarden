@@ -8,7 +8,7 @@ import { CheckoutRequest, OrderResponse } from '../models/checkout';
 })
 export class CheckoutService {
 
-  private checkoutBaseUrl = 'http://localhost:8080/api/checkout';
+  private checkoutBaseUrl = 'http://localhost:8081/api/checkout';
 
   constructor(private httpClient: HttpClient) { }
 

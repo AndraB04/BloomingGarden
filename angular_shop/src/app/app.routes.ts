@@ -12,6 +12,8 @@ import { ListProductsComponent } from './list-products/list-products.component';
 import { NewsletterManagerComponent } from './dashboard/newsletter-manager/newsletter-manager.component';
 import { EmailSettingsComponent } from './preferences/email-settings/email-settings.component';
 import { UnsubscribeComponent } from './shared/unsubscribe/unsubscribe.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 
 
 
@@ -52,6 +54,14 @@ export const routes: Routes = [
   {
     path: 'products',
     component: ListProductsComponent
+  },
+  {
+    path: 'checkout',
+    component: CheckoutComponent
+  },
+  {
+    path: 'order-confirmation/:orderTrackingNumber',
+    component: OrderConfirmationComponent
   },
   {
     path: "dashboard", children: [

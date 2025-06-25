@@ -3,6 +3,7 @@ package com.backend.app.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "orders")
 @Data
+@EqualsAndHashCode(exclude = {"orderItems"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {

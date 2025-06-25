@@ -4,6 +4,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {NgIf} from "@angular/common";
 import {MatDialog} from "@angular/material/dialog";
 import {OrderService} from "../../services/order.service";
+import {CartService} from "../../services/cart.service";
 import {CartDialogComponent} from "../cart-dialog/cart-dialog.component";
 
 @Component({
@@ -20,9 +21,32 @@ import {CartDialogComponent} from "../cart-dialog/cart-dialog.component";
 export class CartButtonComponent {
   @Input("productsCount") productsCount: number = 0;
 
-  constructor(public dialog: MatDialog, private orderService: OrderService) {
+  constructor(public dialog: MatDialog, private orderService: OrderService, private cartService: CartService) {
+    // Listen to both cart systems to get total count
+    this.updateCartCount();
+    
+    // Subscribe to old cart system changes
     orderService.getCart().subscribe((products: Array<any>) => {
-      this.productsCount = products.length;
+      this.updateCartCount();
+    });
+    
+    // Subscribe to modern cart system changes
+    cartService.cartItems.subscribe((cartItems) => {
+      this.updateCartCount();
+    });
+  }
+
+  private updateCartCount(): void {
+    // Get count from old cart system
+    this.orderService.getCart().subscribe((oldCartProducts: Array<any>) => {
+      // Get count from modern cart system
+      const modernCartItems = this.cartService.cartItems.getValue();
+      
+      // Calculate total quantity from modern cart (considering quantities)
+      const modernCartCount = modernCartItems.reduce((total, item) => total + item.quantity, 0);
+      
+      // Total count is old cart products + modern cart items
+      this.productsCount = oldCartProducts.length + modernCartCount;
     });
   }
 
@@ -36,7 +60,5 @@ export class CartButtonComponent {
         console.log(`Dialog result: ${result}`);
       });
     }
-
-
   }
 }

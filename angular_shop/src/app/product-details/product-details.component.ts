@@ -15,6 +15,8 @@ import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {OrderService} from "../services/order.service";
+import {CartService} from "../services/cart.service";
+import {CartItem} from "../models/cart-item";
 import {CartButtonComponent} from "../home/cart-button/cart-button.component";
 import {ListProductsComponent} from "../list-products/list-products.component";
 
@@ -47,7 +49,7 @@ export class ProductDetailsComponent implements OnInit {
 
   data = {}
 
-  constructor(private route: ActivatedRoute, private router: Router, private customerService: CustomerService, private productService: ProductService, public appConfig: ConfigurationsService, private orderService: OrderService) {
+  constructor(private route: ActivatedRoute, private router: Router, private customerService: CustomerService, private productService: ProductService, public appConfig: ConfigurationsService, private orderService: OrderService, private cartService: CartService) {
   }
 
 
@@ -92,17 +94,30 @@ export class ProductDetailsComponent implements OnInit {
 
   onBuy(): void {
     console.log('ProductDetailsComponent - onBuy: Attempting to add product to cart.');
-    console.log('Product Data being added:', this.productData); // <--- ADD THIS LOG
+    console.log('Product Data being added:', this.productData);
 
     if (this.customerService.getLoggedUser() == null) {
       alert("Utilizatorul nu este logat, trebuie sa te loghezi inainte sa adaugi produse in cos");
       this.router.navigate(["/", "auth"]);
     } else {
-      if (this.productData) { // <--- ADD THIS CHECK
-        this.orderService.addToCart(this.productData);
+      if (this.productData) {
+        // Use modern cart service instead of old order service
+        const cartItem: CartItem = {
+          id: this.productData.id,
+          name: this.productData.name || this.productData.title,
+          imageUrl: this.productData.image1,
+          unitPrice: this.productData.price,
+          quantity: 1
+        };
+        this.cartService.addToCart(cartItem);
+        
+        // Show success message and navigate to cart or stay on page
+        alert('Product added to cart successfully!');
+        // Optionally navigate to checkout or stay on the current page
+        // this.router.navigate(['/checkout']);
       } else {
         console.error('ProductDetailsComponent - onBuy: productData is null or undefined!');
-        alert('Cannot add to cart: Product details not loaded.'); // <--- Optional: a more descriptive alert
+        alert('Cannot add to cart: Product details not loaded.');
       }
     }
   }

@@ -91,7 +91,11 @@ public class OrderService {
             customer = new Customer();
             customer.setFirstName(checkoutRequest.getFirstName());
             customer.setLastName(checkoutRequest.getLastName());
+            customer.setName(checkoutRequest.getFirstName() + " " + checkoutRequest.getLastName());
             customer.setEmail(checkoutRequest.getEmail());
+            customer.setPassword(""); // Set a default empty password for checkout customers
+            customer.setUserRole(UserRole.CUSTOMER); // Need to import UserRole
+            customer.setSubscribed(false);
             customerRepository.save(customer);
         }
 
