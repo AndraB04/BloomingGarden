@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "customers")
@@ -20,6 +22,11 @@ public class Customer implements UserDetails {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -38,7 +45,9 @@ public class Customer implements UserDetails {
     @Column(name = "subscribed")
     private boolean subscribed;
 
-    // --- Getters and Setters ---
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    private Set<Order> orders = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -53,6 +62,22 @@ public class Customer implements UserDetails {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -99,7 +124,15 @@ public class Customer implements UserDetails {
         this.subscribed = subscribed;
     }
 
-    // --- METHODS REQUIRED BY UserDetails INTERFACE ---
+    public void add(Order order) {
+        if (order != null) {
+            if (this.orders == null) {
+                this.orders = new HashSet<>();
+            }
+            this.orders.add(order);
+            order.setCustomer(this);
+        }
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -115,24 +148,27 @@ public class Customer implements UserDetails {
     public String getPassword() {
         return this.password;
     }
-    
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-    
+
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
-    
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-    
+
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Customer() {
     }
 }

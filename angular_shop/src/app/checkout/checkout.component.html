@@ -1,0 +1,136 @@
+<div class="checkout-page">
+  <h2>Finalizare Comandă</h2>
+
+  <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+
+    <div class="cart-summary">
+      <h3>Sumar Coș</h3>
+      <p>Total Cantitate: {{ totalQuantity }}</p>
+      <p>Total Preț: {{ totalPrice | currency:'RON':'symbol':'1.2-2' }}</p>
+    </div>
+
+    <div formGroupName="customer" class="form-section">
+      <h3>Detalii Client</h3>
+      <div>
+        <label for="firstName">Prenume:</label>
+        <input id="firstName" type="text" formControlName="firstName">
+        <div *ngIf="hasError('customer', 'firstName')" class="error-message">
+          Prenumele este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="lastName">Nume:</label>
+        <input id="lastName" type="text" formControlName="lastName">
+        <div *ngIf="hasError('customer', 'lastName')" class="error-message">
+          Numele este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input id="email" type="email" formControlName="email">
+        <div *ngIf="hasError('customer', 'email')" class="error-message">
+          Email-ul este obligatoriu și valid.
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="shippingAddress" class="form-section">
+      <h3>Adresa de Livrare</h3>
+      <div>
+        <label for="shippingStreet">Strada:</label>
+        <input id="shippingStreet" type="text" formControlName="street">
+        <div *ngIf="hasError('shippingAddress', 'street')" class="error-message">
+          Strada este obligatorie.
+        </div>
+      </div>
+      <div>
+        <label for="shippingCity">Oraș:</label>
+        <input id="shippingCity" type="text" formControlName="city">
+        <div *ngIf="hasError('shippingAddress', 'city')" class="error-message">
+          Orașul este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="shippingState">Județ:</label>
+        <input id="shippingState" type="text" formControlName="state">
+        <div *ngIf="hasError('shippingAddress', 'state')" class="error-message">
+          Județul este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="shippingZipCode">Cod Poștal:</label>
+        <input id="shippingZipCode" type="text" formControlName="zipCode">
+        <div *ngIf="hasError('shippingAddress', 'zipCode')" class="error-message">
+          Codul poștal este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="shippingCountry">Țara:</label>
+        <input id="shippingCountry" type="text" formControlName="country" readonly>
+        <div *ngIf="hasError('shippingAddress', 'country')" class="error-message">
+          Țara este obligatorie.
+        </div>
+      </div>
+
+      <div>
+        <input type="checkbox" id="sameAsShipping" (change)="copyShippingAddressToBillingAddress($event)">
+        <label for="sameAsShipping">Adresa de facturare este aceeași cu adresa de livrare</label>
+      </div>
+    </div>
+
+    <div formGroupName="billingAddress" class="form-section">
+      <h3>Adresa de Facturare</h3>
+      <div>
+        <label for="billingStreet">Strada:</label>
+        <input id="billingStreet" type="text" formControlName="street">
+        <div *ngIf="hasError('billingAddress', 'street')" class="error-message">
+          Strada este obligatorie.
+        </div>
+      </div>
+      <div>
+        <label for="billingCity">Oraș:</label>
+        <input id="billingCity" type="text" formControlName="city">
+        <div *ngIf="hasError('billingAddress', 'city')" class="error-message">
+          Orașul este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="billingState">Județ:</label>
+        <input id="billingState" type="text" formControlName="state">
+        <div *ngIf="hasError('billingAddress', 'state')" class="error-message">
+          Județul este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="billingZipCode">Cod Poștal:</label>
+        <input id="billingZipCode" type="text" formControlName="zipCode">
+        <div *ngIf="hasError('billingAddress', 'zipCode')" class="error-message">
+          Codul poștal este obligatoriu.
+        </div>
+      </div>
+      <div>
+        <label for="billingCountry">Țara:</label>
+        <input id="billingCountry" type="text" formControlName="country" readonly>
+        <div *ngIf="hasError('billingAddress', 'country')" class="error-message">
+          Țara este obligatorie.
+        </div>
+      </div>
+    </div>
+
+    <div formGroupName="payment" class="form-section">
+      <h3>Metoda de Plată</h3>
+      <div *ngFor="let method of paymentMethods">
+        <input
+          type="radio"
+          [id]="method.id"
+          [value]="method.id"
+          formControlName="paymentMethod"
+          (change)="onPaymentMethodChange()">
+        <label [for]="method.id">{{ method.name }}</label>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="checkoutFormGroup.invalid">Plasează Comanda ({{ totalPrice | currency:'RON':'symbol':'1.2-2' }})</button>
+
+  </form>
+</div>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
@@ -11,28 +12,29 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Column(name = "product_name", nullable = false)
     private String name;
-    
+
     @Column(name = "product_description", columnDefinition = "text", nullable = false)
     private String description;
-    
-    @Column(name = "product_price", nullable = false)
-    private double price;
-    
+
+    // --- MODIFICARE AICI: Schimbă 'double price' cu 'BigDecimal unitPrice' ---
+    @Column(name = "product_price", nullable = false) // Poți păstra numele coloanei dacă vrei
+    private BigDecimal unitPrice; // <-- Schimbă tipul și numele
+
     @Column(name = "product_image_1")
     private String image1;
-    
+
     @Column(name = "product_image_2")
     private String image2;
-    
+
     @Column(name = "product_image_3")
     private String image3;
-    
+
     @Column(name = "product_image_4")
     private String image4;
-    
+
     @Column(name = "product_category")
     @Enumerated(value = EnumType.STRING)
     private ProductType productType;
@@ -45,13 +47,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, double price, 
-                  String image1, String image2, String image3, String image4, 
-                  ProductType productType) {
+    public Product(Long id, String name, String description, BigDecimal unitPrice, // <-- Schimbă tipul în constructor
+                   String image1, String image2, String image3, String image4,
+                   ProductType productType) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.price = price;
+        this.unitPrice = unitPrice;
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
@@ -84,12 +86,13 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
-        return price;
+    // --- MODIFICARE AICI: Getter și Setter pentru unitPrice (era price) ---
+    public BigDecimal getUnitPrice() { // <-- Schimbă numele metodei și tipul returnat
+        return unitPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setUnitPrice(BigDecimal unitPrice) { // <-- Schimbă numele metodei și tipul parametrului
+        this.unitPrice = unitPrice;
     }
 
     public String getImage1() {
@@ -123,6 +126,13 @@ public class Product {
     public void setImage4(String image4) {
         this.image4 = image4;
     }
+
+    // --- ADĂUGARE AICI: Getter pentru imageUrl ---
+    // OrderService așteaptă o metodă getImageUrl(). Putem returna image1.
+    public String getImageUrl() {
+        return this.image1; // Returnează URL-ul primei imagini
+    }
+
 
     public ProductType getProductType() {
         return productType;

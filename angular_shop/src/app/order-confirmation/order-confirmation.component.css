@@ -1,0 +1,42 @@
+/* src/app/order-confirmation/order-confirmation.component.css */
+
+.order-confirmation-page {
+  padding: 30px;
+  text-align: center;
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: #d4edda; /* Verde deschis */
+  color: #155724; /* Verde închis */
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+}
+
+.order-confirmation-page h2 {
+  color: #155724;
+  margin-bottom: 20px;
+}
+
+.order-confirmation-page p {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.order-confirmation-page strong {
+  color: #0f5132;
+  font-size: 1.2rem;
+}
+
+.order-confirmation-page a {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.order-confirmation-page a:hover {
+  background-color: #0056b3;
+}
