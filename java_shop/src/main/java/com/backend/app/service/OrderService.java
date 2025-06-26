@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class OrderService {
@@ -21,14 +23,17 @@ public class OrderService {
     private CustomerRepository customerRepository;
     private ProductRepository productRepository;
     private OrderRepository orderRepository;
+    private OrderDataRepository orderDataRepository;
 
     @Autowired
     public OrderService(CustomerRepository customerRepository,
                         ProductRepository productRepository,
-                        OrderRepository orderRepository) {
+                        OrderRepository orderRepository,
+                        OrderDataRepository orderDataRepository) {
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
+        this.orderDataRepository = orderDataRepository;
     }
 
     @Transactional
@@ -102,12 +107,52 @@ public class OrderService {
         order.setCustomer(customer);
         customer.add(order);
 
-        orderRepository.save(order);
+        // Save the main order first
+        Order savedOrder = orderRepository.save(order);
 
-        return order;
+        // Create and save OrderData for dashboard compatibility
+        createOrderDataFromOrder(savedOrder, checkoutRequest);
+
+        return savedOrder;
     }
 
     private String generateOrderTrackingNumber() {
         return UUID.randomUUID().toString();
+    }
+
+    private void createOrderDataFromOrder(Order order, CheckoutRequest checkoutRequest) {
+        OrderData orderData = new OrderData();
+        
+        // Set basic order information
+        orderData.setDate(LocalDate.now());
+        orderData.setTotal(order.getTotalAmount().doubleValue());
+        
+        // Create details string from shipping and checkout info
+        String details = String.format("Order for %s %s - Shipping: %s, %s, %s %s", 
+            checkoutRequest.getFirstName(), 
+            checkoutRequest.getLastName(),
+            checkoutRequest.getShippingStreet(),
+            checkoutRequest.getShippingCity(),
+            checkoutRequest.getShippingState(),
+            checkoutRequest.getShippingZipCode());
+        orderData.setDetails(details);
+        
+        // Set payment status as PENDING
+        orderData.setPaymentStatus(PaymentStatus.PENDING);
+        
+        // Set customer
+        orderData.setCustomer(order.getCustomer());
+        
+        // Convert OrderItems to Product list
+        List<Product> productList = new ArrayList<>();
+        if (order.getOrderItems() != null) {
+            for (OrderItem orderItem : order.getOrderItems()) {
+                productList.add(orderItem.getProduct());
+            }
+        }
+        orderData.setProductList(productList);
+        
+        // Save OrderData
+        orderDataRepository.save(orderData);
     }
 }
