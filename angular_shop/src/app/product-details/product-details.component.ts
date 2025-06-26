@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ProductService} from "../services/product.service";
 import {MatButtonModule} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
-import {NgForOf, NgIf, TitleCasePipe} from "@angular/common";
+import {CommonModule, NgForOf, NgIf, TitleCasePipe} from "@angular/common"; // Adaugat CommonModule
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatSidenavModule} from "@angular/material/sidenav";
@@ -24,6 +24,7 @@ import {ListProductsComponent} from "../list-products/list-products.component";
   selector: 'app-product-details',
   standalone: true,
   imports: [
+    CommonModule, // Adaugat
     MatButtonModule,
     MatCardModule,
     NgIf,
@@ -59,16 +60,13 @@ export class ProductDetailsComponent implements OnInit {
 
       if (id != null) {
         this.productService.getProductById(id).subscribe((response: any) => {
-          console.log('ProductDeztailsComponent - getProductById response:', response); // <--- ADD THIS LOG
-          if (response && response.data) { // Ensure response and data exist
+          if (response && response.data) {
             this.productData = response.data;
-            console.log('ProductDetailsComponent - productData set to:', this.productData); // <--- ADD THIS LOG
           } else {
             console.error('ProductDetailsComponent - getProductById: No data found in response.', response);
           }
         });
       }
-      console.log('ProductDetailsComponent - ID from URL:', id);
     });
   }
 
@@ -93,28 +91,21 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onBuy(): void {
-    console.log('ProductDetailsComponent - onBuy: Attempting to add product to cart.');
-    console.log('Product Data being added:', this.productData);
-
     if (this.customerService.getLoggedUser() == null) {
       alert("Utilizatorul nu este logat, trebuie sa te loghezi inainte sa adaugi produse in cos");
       this.router.navigate(["/", "auth"]);
     } else {
       if (this.productData) {
-        // Use modern cart service instead of old order service
         const cartItem: CartItem = {
           id: this.productData.id,
           name: this.productData.name || this.productData.title,
           imageUrl: this.productData.image1,
-          unitPrice: this.productData.price,
+          unitPrice: this.productData.unitPrice, // <-- Modificat aici
           quantity: 1
         };
         this.cartService.addToCart(cartItem);
-        
-        // Show success message and navigate to cart or stay on page
+
         alert('Product added to cart successfully!');
-        // Optionally navigate to checkout or stay on the current page
-        // this.router.navigate(['/checkout']);
       } else {
         console.error('ProductDetailsComponent - onBuy: productData is null or undefined!');
         alert('Cannot add to cart: Product details not loaded.');
@@ -131,7 +122,7 @@ export class ProductDetailsComponent implements OnInit {
 
   private parseDate(date: Date) {
     let day = date.getDate();
-    let month = date.getMonth() + 1; //lunile anului incep de la 0. Ianuarie=0
+    let month = date.getMonth() + 1;
     let year = date.getFullYear();
     let dateStr = "";
 
@@ -148,7 +139,6 @@ export class ProductDetailsComponent implements OnInit {
     } else {
       dateStr += day;
     }
-    console.log(dateStr);
     return dateStr;
   }
 }

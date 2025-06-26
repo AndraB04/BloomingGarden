@@ -14,6 +14,8 @@ export class CartService {
   constructor() { }
 
   addToCart(theCartItem: CartItem) {
+    console.log('CartService - addToCart called with:', theCartItem);
+
     let alreadyExistsInCart: boolean = false;
     let existingCartItem: CartItem | undefined = undefined;
 
@@ -23,14 +25,18 @@ export class CartService {
     }
 
     if (alreadyExistsInCart) {
+      console.log('CartService - Item already exists, incrementing quantity for ID:', theCartItem.id);
       if (existingCartItem) {
         existingCartItem.quantity++;
       }
     } else {
+      console.log('CartService - Adding new item:', theCartItem);
       this.cartItems.next([...this.cartItems.getValue(), theCartItem]);
     }
 
+    console.log('CartService - Current items:', this.cartItems.getValue());
     this.computeCartTotals();
+    console.log('CartService - computeCartTotals finished.');
   }
 
   computeCartTotals() {
