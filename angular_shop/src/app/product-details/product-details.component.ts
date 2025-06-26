@@ -100,7 +100,7 @@ export class ProductDetailsComponent implements OnInit {
           id: this.productData.id,
           name: this.productData.name || this.productData.title,
           imageUrl: this.productData.image1,
-          unitPrice: this.productData.unitPrice, // <-- Modificat aici
+          unitPrice: this.productData.price || this.productData.unitPrice,
           quantity: 1
         };
         this.cartService.addToCart(cartItem);

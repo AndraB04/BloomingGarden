@@ -30,7 +30,7 @@
               <div class="product-info">
                 <h2 class="product-title">{{ currentProduct.name }}</h2>
                 <p class="product-description">{{ currentProduct.description }}</p>
-                <p class="product-price">{{ currentProduct.price }} RON</p>
+                <p class="product-price">{{ currentProduct.price }} €</p>
                 <p class="product-quantity">Cantitate: {{ currentProduct.quantity || 1 }}</p>
 
                 <div class="product-navigation" *ngIf="reservation.productList.length > 1">
@@ -59,7 +59,7 @@
         <p>No products in this order</p>
       </div>
 
-      <p class="p-total">Total: {{ reservation.total }} RON</p>
+      <p class="p-total">Total: {{ reservation.total }} €</p>
 
       <div class="div-admin-controls">
         <button mat-raised-button color="primary" class="btn-action margin-bottom"

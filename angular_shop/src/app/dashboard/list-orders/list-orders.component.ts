@@ -36,7 +36,12 @@ export class ListOrdersComponent implements OnInit, OnDestroy {
       this.orders = orderList.map(order => {
         if (order.productList) {
           order.productList.forEach((product: any) => {
-            product.imageUrl = this.imagesBaseUrl + product.image;
+            // Use image1 if available, otherwise fall back to image
+            if (product.image1) {
+              product.imageUrl = product.image1;
+            } else if (product.image) {
+              product.imageUrl = this.imagesBaseUrl + product.image;
+            }
           });
         }
         return { ...order, currentProductIndex: 0 };

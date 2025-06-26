@@ -17,7 +17,7 @@
     <div class="input-container">
       <mat-form-field class="input-field">
         <mat-label>Price</mat-label>
-        <input matInput placeholder="99.99 RON" [formControl]="price" required>
+        <input matInput placeholder="99.99 €" [formControl]="price" required>
         <mat-error *ngIf="price.invalid">{{getErrorMessage(price)}}</mat-error>
       </mat-form-field>
     </div>

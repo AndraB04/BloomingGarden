@@ -95,6 +95,16 @@ public class Product {
         this.unitPrice = unitPrice;
     }
 
+    // --- ADĂUGARE: Getter pentru price pentru compatibilitate cu frontend ---
+    public BigDecimal getPrice() {
+        return unitPrice; // Returnează aceeași valoare ca unitPrice
+    }
+
+    // --- ADĂUGARE: Setter pentru price pentru compatibilitate cu frontend ---
+    public void setPrice(BigDecimal price) {
+        this.unitPrice = price; // Setează aceeași valoare în unitPrice
+    }
+
     public String getImage1() {
         return image1;
     }

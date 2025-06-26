@@ -8,7 +8,7 @@
     <div class="cart-summary form-section">
       <h3>Sumar Coș</h3>
       <p>Total Cantitate: {{ totalQuantity }}</p>
-      <p>Total Preț: {{ totalPrice | currency:'RON':'symbol':'1.2-2' }}</p>
+      <p>Total Preț: {{ totalPrice | currency:'EUR':'symbol':'1.2-2' }}</p>
       <!-- Poți adăuga aici lista produselor din coș -->
     </div>
 
@@ -202,7 +202,7 @@
     </div>
 
 
-    <button type="submit" [disabled]="checkoutFormGroup.invalid">Plasează Comanda ({{ totalPrice | currency:'RON':'symbol':'1.2-2' }})</button>
+    <button type="submit" [disabled]="checkoutFormGroup.invalid">Plasează Comanda ({{ totalPrice | currency:'EUR':'symbol':'1.2-2' }})</button>
 
   </form>
 </div>
