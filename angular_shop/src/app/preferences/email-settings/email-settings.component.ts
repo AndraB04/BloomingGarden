@@ -5,11 +5,14 @@ import { NewsletterService } from '../../services/newsletter.service';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-email-settings',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatCardModule],
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, FormsModule],
   template: `
     <div class="preferences-container">
       <mat-card>
@@ -17,8 +20,20 @@ import { MatCardModule } from '@angular/material/card';
           <h2>Email Preferences</h2>
           <p>You can manage your email subscription preferences here.</p>
           
+          <div class="email-input-section" *ngIf="!emailFromParams">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <mat-label>Enter your email address</mat-label>
+              <input matInput type="email" [(ngModel)]="userEmail" placeholder="your.email@example.com">
+            </mat-form-field>
+          </div>
+
+          <div class="email-display-section" *ngIf="emailFromParams">
+            <p><strong>Email:</strong> {{ emailFromParams }}</p>
+          </div>
+          
           <div class="settings-actions">
-            <button mat-raised-button color="warn" (click)="unsubscribe()">
+            <button mat-raised-button color="warn" (click)="unsubscribe()" 
+                    [disabled]="!userEmail && !emailFromParams">
               Unsubscribe from Newsletter
             </button>
           </div>
@@ -50,9 +65,23 @@ import { MatCardModule } from '@angular/material/card';
     .settings-actions {
       margin-top: 24px;
     }
+
+    .email-input-section {
+      margin-bottom: 24px;
+    }
+
+    .email-display-section {
+      margin-bottom: 24px;
+      padding: 16px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+    }
   `]
 })
 export class EmailSettingsComponent implements OnInit {
+  userEmail: string = '';
+  emailFromParams: string = '';
+
   constructor(
     private route: ActivatedRoute,
     private newsletterService: NewsletterService,
@@ -62,16 +91,23 @@ export class EmailSettingsComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['email']) {
+        this.emailFromParams = params['email'];
         this.unsubscribeEmail(params['email']);
       }
     });
   }
 
   unsubscribe() {
-    // Show confirmation dialog or directly unsubscribe if email is in URL params
-    if (this.route.snapshot.queryParams['email']) {
-      this.unsubscribeEmail(this.route.snapshot.queryParams['email']);
+    const emailToUnsubscribe = this.emailFromParams || this.userEmail;
+    if (!emailToUnsubscribe || !emailToUnsubscribe.trim()) {
+      this.snackBar.open('Please enter a valid email address', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
     }
+
+    this.unsubscribeEmail(emailToUnsubscribe);
   }
 
   private unsubscribeEmail(email: string) {
